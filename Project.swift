@@ -28,7 +28,7 @@ enum ExternalDependency {
     case rxDataSources
     case snapKit
     case then
-    
+    case swinject
     
     var name: String {
         switch self {
@@ -39,6 +39,7 @@ enum ExternalDependency {
         case .rxDataSources: return "RxDataSources"
         case .snapKit: return "SnapKit"
         case .then: return "Then"
+        case .swinject: return "Swinject"
         }
     }
     
@@ -54,7 +55,8 @@ extension Module {
         case .core:
             return [
                 ExternalDependency.rxSwift.external,
-                ExternalDependency.rxRelay.external
+                ExternalDependency.rxRelay.external,
+                ExternalDependency.swinject.external
             ]
             
         case .domain:
