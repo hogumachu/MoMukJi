@@ -10,7 +10,7 @@ import Swinject
 public protocol DependencyInjector {
     func assemble(_ assemblys: [Assembly])
     func register<T>(_ type: T.Type, _ object: T)
-    func resovle<T>(_ type: T.Type) -> T?
+    func resovle<T>(_ type: T.Type) -> T
 }
 
 public final class DependencyInjectorImpl: DependencyInjector {
@@ -33,8 +33,8 @@ public final class DependencyInjectorImpl: DependencyInjector {
         }
     }
     
-    public func resovle<T>(_ type: T.Type) -> T? {
-        container.resolve(type)
+    public func resovle<T>(_ type: T.Type) -> T {
+        container.resolve(type)!
     }
     
 }

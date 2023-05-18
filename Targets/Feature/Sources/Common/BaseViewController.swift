@@ -15,8 +15,9 @@ class BaseViewController<ReactorType: Reactor>: UIViewController, View {
     
     typealias Reactor = ReactorType
     
-    init() {
+    init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
     }
     
     required init?(coder: NSCoder) {
