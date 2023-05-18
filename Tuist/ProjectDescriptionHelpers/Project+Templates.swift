@@ -123,8 +123,8 @@ extension Project {
                 bundleId: "io.tuist.\(name)",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .extendingDefault(with: plist),
-                sources: ["App//Sources/**"],
-                resources: ["App/Resources/**"],
+                sources: ["Targets/App//Sources/**"],
+                resources: ["Targets/App/Resources/**"],
                 dependencies: dependencies
             ),
             Target(
@@ -134,7 +134,7 @@ extension Project {
                 bundleId: "io.tuist.\(name)Tests",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .default,
-                sources: ["App/Tests/**"],
+                sources: ["Targets/App/Tests/**"],
                 resources: [],
                 dependencies: [.target(name: name)]
             )
