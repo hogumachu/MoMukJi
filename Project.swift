@@ -121,7 +121,7 @@ func makeTargets() -> [Target] {
     )
     let moduleTargets = Module.allCases.flatMap { $0.createTargets(deploymentTarget: deploymentTarget) }
     
-    return appTargets + moduleTargets
+    return [appTargets] + moduleTargets
 }
 
 let project = Project(
