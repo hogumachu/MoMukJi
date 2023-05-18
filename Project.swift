@@ -101,11 +101,11 @@ extension Module {
 private let settings = Settings.settings(configurations: [
     .debug(
         name: "Debug",
-        xcconfig: .relativeToRoot("App/Configuration/Debug.xcconfig")
+        xcconfig: .relativeToRoot("Targets/App/Configuration/Debug.xcconfig")
     ),
     .release(
         name: "Release",
-        xcconfig: .relativeToRoot("App/Configuration/Release.xcconfig")
+        xcconfig: .relativeToRoot("Targets/App/Configuration/Release.xcconfig")
     )
 ])
 
