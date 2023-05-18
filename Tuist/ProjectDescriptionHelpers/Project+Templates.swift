@@ -123,7 +123,7 @@ extension Project {
                 bundleId: "io.tuist.\(name)",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .extendingDefault(with: plist),
-                sources: ["Targets/App//Sources/**"],
+                sources: ["Targets/App/Sources/**"],
                 resources: ["Targets/App/Resources/**"],
                 dependencies: dependencies
             ),
