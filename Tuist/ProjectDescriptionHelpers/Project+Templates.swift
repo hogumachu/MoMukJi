@@ -109,36 +109,37 @@ extension Project {
         name: String,
         deploymentTarget: DeploymentTarget,
         dependencies: [TargetDependency]
-    ) -> [Target] {
+    ) -> Target {
         let plist: [String: InfoPlist.Value] = [
             "UIMainStoryboardFile": "",
-            "UILaunchStoryboardName": "LaunchScreen"
+            "CFBundleDisplayName": "$(PRODUCT_NAME)",
+            "UILaunchStoryboardName": "LaunchScreen",
+            "UIUserInterfaceStyle": "Light",
+            "UISupportedInterfaceOrientations": ["UIInterfaceOrientationPortrait"],
+            "UIApplicationSceneManifest": [
+              "UIApplicationSupportsMultipleScenes": false,
+              "UISceneConfigurations": [
+                "UIWindowSceneSessionRoleApplication": [
+                  [
+                    "UISceneConfigurationName": "Default Configuration",
+                    "UISceneDelegateClassName": "$(PRODUCT_MODULE_NAME).SceneDelegate"
+                  ],
+                ]
+              ]
+            ],
         ]
         
-        return [
-            Target(
-                name: name,
-                platform: .iOS,
-                product: .framework,
-                bundleId: "io.tuist.\(name)",
-                deploymentTarget: deploymentTarget,
-                infoPlist: .extendingDefault(with: plist),
-                sources: ["Targets/App/Sources/**"],
-                resources: ["Targets/App/Resources/**"],
-                dependencies: dependencies
-            ),
-            Target(
-                name: "\(name)Tests",
-                platform: .iOS,
-                product: .unitTests,
-                bundleId: "io.tuist.\(name)Tests",
-                deploymentTarget: deploymentTarget,
-                infoPlist: .default,
-                sources: ["Targets/App/Tests/**"],
-                resources: [],
-                dependencies: [.target(name: name)]
-            )
-        ]
+        return Target(
+            name: name,
+            platform: .iOS,
+            product: .app,
+            bundleId: "io.tuist.\(name)",
+            deploymentTarget: deploymentTarget,
+            infoPlist: .extendingDefault(with: plist),
+            sources: ["Targets/App/Sources/**"],
+            resources: ["Targets/App/Resources/**"],
+            dependencies: dependencies
+        )
     }
     
 }
