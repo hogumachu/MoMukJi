@@ -1,28 +1,29 @@
 //
-//  IntroReactor.swift
+//  HomeReactor.swift
 //  Feature
 //
-//  Created by 홍성준 on 2023/05/18.
+//  Created by 홍성준 on 2023/05/19.
 //
 
+import Core
 import RxSwift
 import ReactorKit
 
-final class IntroReactor: Reactor {
+final class HomeReactor: Reactor {
     
-    private let dependency: Depedency
     var initialState = State()
+    private let dependency: Dependency
     
-    struct Depedency {
+    struct Dependency {
         let coordinator: AppCoordinator
     }
     
-    init(dependency: Depedency) {
+    init(dependency: Dependency) {
         self.dependency = dependency
     }
     
     enum Action {
-        case homeButtonTap
+        
     }
     
     enum Mutation {
@@ -34,11 +35,7 @@ final class IntroReactor: Reactor {
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
-        switch action {
-        case .homeButtonTap:
-            dependency.coordinator.start(root: .home)
-            return .empty()
-        }
+        
     }
     
     func reduce(state: State, mutation: Mutation) -> State {
