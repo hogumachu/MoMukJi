@@ -13,7 +13,7 @@ import Then
 
 final class IntroViewController: BaseViewController<IntroReactor> {
     
-    private let homeButton = UIButton(frame: .zero)
+    private let homeButton = ActionButton(frame: .zero)
     
     override func setupLayout() {
         view.addSubview(homeButton)
@@ -28,7 +28,7 @@ final class IntroViewController: BaseViewController<IntroReactor> {
         view.backgroundColor = .white
         
         homeButton.do {
-            $0.backgroundColor = .systemPink
+            $0.style = .normal
             $0.layer.cornerRadius = 16
             $0.setTitle("홈으로", for: .normal)
         }
