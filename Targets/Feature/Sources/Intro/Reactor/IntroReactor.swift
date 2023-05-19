@@ -22,7 +22,7 @@ final class IntroReactor: Reactor {
     }
     
     enum Action {
-        
+        case homeButtonTap
     }
     
     enum Mutation {
@@ -34,7 +34,11 @@ final class IntroReactor: Reactor {
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
-        
+        switch action {
+        case .homeButtonTap:
+            dependency.coordinator.start(root: .home)
+            return .empty()
+        }
     }
     
     func reduce(state: State, mutation: Mutation) -> State {
