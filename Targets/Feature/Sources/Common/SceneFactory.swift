@@ -10,6 +10,7 @@ import UIKit
 
 public enum Scene {
     case intro
+    case home
 }
 
 public protocol SceneFactory {
@@ -32,6 +33,12 @@ public final class SceneFactoryImpl: SceneFactory {
             let dependency = IntroReactor.Depedency(coordinator: coordinator)
             let reactor = IntroReactor(dependency: dependency)
             let viewController = IntroViewController(reactor: reactor)
+            return viewController
+            
+        case .home:
+            let dependency = HomeReactor.Dependency(coordinator: coordinator)
+            let reactor = HomeReactor(dependency: dependency)
+            let viewController = HomeViewController(reactor: reactor)
             return viewController
         }
     }
