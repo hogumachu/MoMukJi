@@ -18,13 +18,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private let injector: DependencyInjector = DependencyInjectorImpl(container: Container())
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // MARK: - Setup ViewController
         guard let scene = scene as? UIWindowScene else { return }
-        setupDependencies()
         let window = UIWindow(windowScene: scene)
         self.window = window
-        coordiantor?.start(root: .intro, from: window)
         window.makeKeyAndVisible()
+        setupDependencies()
+        if UserDefaults.standard.bool(key: .isIntroDidShown) {
+            coordiantor?.start(root: .home)
+        } else {
+            UserDefaults.standard.setValue(true, key: .isIntroDidShown)
+            coordiantor?.start(root: .intro)
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {}
@@ -42,7 +46,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 extension SceneDelegate {
     
     private func setupDependencies() {
-        let appCoordinator = AppCoordinatorImpl(factory: SceneFactoryImpl(injector: injector))
+        let factory = SceneFactoryImpl(injector: injector)
+        let appCoordinator = AppCoordinatorImpl(factory: factory)
         coordiantor = appCoordinator
         injector.assemble([])
         injector.register(AppCoordinator.self, appCoordinator)
