@@ -11,4 +11,8 @@ public struct FoodRequest {
     
     public let predicate: NSPredicate?
     
+    public init(predicate: NSPredicate? = nil) {
+        self.predicate = predicate
+    }
+    
 }
