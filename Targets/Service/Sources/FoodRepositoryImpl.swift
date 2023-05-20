@@ -9,15 +9,15 @@ import Domain
 import Foundation
 import RealmSwift
 
-final class FoodRepositoryImpl: FoodRepository {
+public final class FoodRepositoryImpl: FoodRepository {
     
     private let realm: Realm
     
-    init(realm: Realm) {
+    public init(realm: Realm) {
         self.realm = realm
     }
     
-    func fetchFoodList(request: FoodRequest) -> [Food] {
+    public func fetchFoodList(request: FoodRequest) -> [Food] {
         var objects = realm.objects(FoodObject.self)
         
         if let predicate = request.predicate {
@@ -29,19 +29,19 @@ final class FoodRepositoryImpl: FoodRepository {
             .compactMap { $0.model }
     }
     
-    func insert(food: Food) throws {
+    public func insert(food: Food) throws {
         try realm.write {
             realm.add(food.object())
         }
         
     }
     
-    func update(food: Food) throws {
+    public func update(food: Food) throws {
         try delete(food: food)
         try insert(food: food)
     }
     
-    func delete(food: Food) throws {
+    public func delete(food: Food) throws {
         try realm.write {
             guard let object = realm.objects(FoodObject.self)
                 .filter({ $0.name == food.name })
