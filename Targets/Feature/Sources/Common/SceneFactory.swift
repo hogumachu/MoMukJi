@@ -6,7 +6,10 @@
 //
 
 import Core
+import Domain
+import Service
 import UIKit
+import RealmSwift
 
 public enum Scene {
     case intro
@@ -36,7 +39,10 @@ public final class SceneFactoryImpl: SceneFactory {
             return viewController
             
         case .home:
-            let dependency = HomeReactor.Dependency(coordinator: coordinator)
+            let dependency = HomeReactor.Dependency(
+                coordinator: coordinator,
+                foodUseCase: FoodUseCaseImpl(repository: FoodRepositoryImpl(realm: try! Realm()))
+            )
             let reactor = HomeReactor(dependency: dependency)
             let viewController = HomeViewController(reactor: reactor)
             return viewController

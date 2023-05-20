@@ -6,6 +6,7 @@
 //
 
 import Core
+import Domain
 import RxSwift
 import ReactorKit
 
@@ -16,6 +17,7 @@ final class HomeReactor: Reactor {
     
     struct Dependency {
         let coordinator: AppCoordinator
+        let foodUseCase: FoodUseCase
     }
     
     init(dependency: Dependency) {
