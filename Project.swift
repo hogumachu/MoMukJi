@@ -100,7 +100,7 @@ extension Module {
         case .feature:
             return [
                 .target(name: Module.userInterface.name),
-                .target(name: Module.domain.name),
+                .target(name: Module.service.name),
                 .ExternalSPM.rxSwift.object,
                 .ExternalSPM.rxCocoa.object,
                 .ExternalSPM.rxRelay.object,
