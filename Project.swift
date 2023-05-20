@@ -20,32 +20,52 @@ enum Module: CaseIterable {
     }
 }
 
-enum ExternalDependency {
-    case rxSwift
-    case rxCocoa
-    case rxRelay
-    case reactorKit
-    case rxDataSources
-    case snapKit
-    case then
-    case swinject
+public extension TargetDependency {
     
-    var name: String {
-        switch self {
-        case .rxSwift: return "RxSwift"
-        case .rxCocoa: return "RxCocoa"
-        case .rxRelay: return "RxRelay"
-        case .reactorKit: return "ReactorKit"
-        case .rxDataSources: return "RxDataSources"
-        case .snapKit: return "SnapKit"
-        case .then: return "Then"
-        case .swinject: return "Swinject"
+    enum ExternalSPM {
+        case rxSwift
+        case rxCocoa
+        case rxRelay
+        case reactorKit
+        case rxDataSources
+        case snapKit
+        case then
+        case swinject
+        
+        var object: TargetDependency {
+            switch self {
+            case .rxSwift: return TargetDependency.external(name: "RxSwift")
+            case .rxCocoa: return TargetDependency.external(name: "RxCocoa")
+            case .rxRelay: return TargetDependency.external(name: "RxRelay")
+            case .reactorKit: return TargetDependency.external(name: "ReactorKit")
+            case .rxDataSources: return TargetDependency.external(name: "RxDataSources")
+            case .snapKit: return TargetDependency.external(name: "SnapKit")
+            case .then: return TargetDependency.external(name: "Then")
+            case .swinject: return TargetDependency.external(name: "Swinject")
+            }
+        }
+    }
+
+    enum Carthage {
+        
+    }
+    
+    enum InternalSPM: CaseIterable {
+        case realmSwift
+        
+        var object: TargetDependency {
+            switch self {
+            case .realmSwift: return TargetDependency.package(product: "RealmSwift")
+            }
+        }
+        
+        var package: Package {
+            switch self {
+            case .realmSwift: return .remote(url: "https://github.com/realm/realm-swift.git", requirement: .upToNextMajor(from: "10.39.1"))
+            }
         }
     }
     
-    var external: TargetDependency {
-        return .external(name: self.name)
-    }
 }
 
 extension Module {
@@ -54,9 +74,9 @@ extension Module {
         switch self {
         case .core:
             return [
-                ExternalDependency.rxSwift.external,
-                ExternalDependency.rxRelay.external,
-                ExternalDependency.swinject.external
+                .ExternalSPM.rxSwift.object,
+                .ExternalSPM.rxRelay.object,
+                .ExternalSPM.swinject.object
             ]
             
         case .domain:
@@ -66,27 +86,28 @@ extension Module {
             
         case .service:
             return [
-                .target(name: Module.domain.name)
+                .target(name: Module.domain.name),
+                .InternalSPM.realmSwift.object
             ]
             
         case .userInterface:
             return [
                 .target(name: Module.domain.name),
-                ExternalDependency.rxSwift.external,
-                ExternalDependency.rxCocoa.external
+                .ExternalSPM.rxSwift.object,
+                .ExternalSPM.rxCocoa.object
             ]
             
         case .feature:
             return [
                 .target(name: Module.userInterface.name),
                 .target(name: Module.domain.name),
-                ExternalDependency.rxSwift.external,
-                ExternalDependency.rxCocoa.external,
-                ExternalDependency.rxRelay.external,
-                ExternalDependency.reactorKit.external,
-                ExternalDependency.rxDataSources.external,
-                ExternalDependency.snapKit.external,
-                ExternalDependency.then.external
+                .ExternalSPM.rxSwift.object,
+                .ExternalSPM.rxCocoa.object,
+                .ExternalSPM.rxRelay.object,
+                .ExternalSPM.reactorKit.object,
+                .ExternalSPM.rxDataSources.object,
+                .ExternalSPM.snapKit.object,
+                .ExternalSPM.then.object
             ]
         }
     }
@@ -126,8 +147,13 @@ func makeTargets() -> [Target] {
     return [appTargets] + moduleTargets
 }
 
+func makePackages() -> [Package] {
+    return TargetDependency.InternalSPM.allCases.map(\.package)
+}
+
 let project = Project(
     name: "MoMukJi",
+    packages: makePackages(),
     settings: settings,
     targets: makeTargets()
 )
