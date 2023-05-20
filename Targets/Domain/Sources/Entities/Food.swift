@@ -9,7 +9,14 @@ import Foundation
 
 public struct Food {
     
-    let name: String
-    let category: String
+    public let name: String
+    public let category: String
+    public let count: Int
+    
+    public init(name: String, category: String, count: Int) {
+        self.name = name
+        self.category = category
+        self.count = count
+    }
     
 }

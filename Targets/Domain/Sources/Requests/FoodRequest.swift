@@ -9,6 +9,6 @@ import Foundation
 
 public struct FoodRequest {
     
-    let predicate: NSPredicate?
+    public let predicate: NSPredicate?
     
 }

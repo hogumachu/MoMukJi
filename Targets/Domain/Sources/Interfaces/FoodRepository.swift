@@ -12,6 +12,6 @@ public protocol FoodRepository {
     func fetchFoodList(request: FoodRequest) -> [Food]
     func insert(food: Food) throws
     func update(food: Food) throws
-    func delete(food: Food)
+    func delete(food: Food) throws
     
 }
