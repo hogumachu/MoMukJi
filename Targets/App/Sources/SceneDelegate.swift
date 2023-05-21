@@ -6,6 +6,8 @@
 //
 
 import Core
+import Domain
+import Service
 import Feature
 import UIKit
 import Swinject
@@ -49,7 +51,7 @@ extension SceneDelegate {
         let factory = SceneFactoryImpl(injector: injector)
         let appCoordinator = AppCoordinatorImpl(factory: factory)
         coordiantor = appCoordinator
-        injector.assemble([])
+        injector.assemble([DomainAssembly(), ServiceAssembly()])
         injector.register(AppCoordinator.self, appCoordinator)
     }
     

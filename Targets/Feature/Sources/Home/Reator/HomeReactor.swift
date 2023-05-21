@@ -28,6 +28,7 @@ final class HomeReactor: Reactor {
     
     enum Action {
         case refresh
+        case addButtonTap
     }
     
     enum Mutation {
@@ -45,6 +46,10 @@ final class HomeReactor: Reactor {
 //            let sections = makeSections(foods: foods)
             let sections = makeMockSections()
             return .just(.setSections(sections))
+            
+        case .addButtonTap:
+            dependency.coordinator.transition(to: .foodCreate, using: .modal, animated: true, completion: nil)
+            return .empty()
         }
     }
     
