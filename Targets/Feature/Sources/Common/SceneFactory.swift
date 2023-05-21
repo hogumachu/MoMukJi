@@ -51,7 +51,8 @@ public final class SceneFactoryImpl: SceneFactory {
         case .foodCreate:
             let dependency = FoodCreateReactor.Dependency(
                 coordinator: coordinator,
-                useCase: injector.resovle(FoodUseCase.self)
+                foodUseCase: injector.resovle(FoodUseCase.self),
+                keywordUseCase: injector.resovle(KeywordUseCase.self)
             )
             let reactor = FoodCreateReactor(dependency: dependency)
             let viewController = FoodCreateViewController(reactor: reactor)

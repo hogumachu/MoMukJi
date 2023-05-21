@@ -18,6 +18,10 @@ public struct ServiceAssembly: Assembly {
         container.register(FoodRepository.self) { resolver in
             return FoodRepositoryImpl(realm: try! Realm())
         }
+        
+        container.register(KeywordRepository.self) { resolver in
+            return KeywordRepositoryImpl()
+        }
     }
     
 }

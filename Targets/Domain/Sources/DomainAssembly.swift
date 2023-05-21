@@ -10,7 +10,6 @@ import Swinject
 
 public struct DomainAssembly: Assembly {
     
-    
     public init() {}
     
     public func assemble(container: Container) {
@@ -18,7 +17,11 @@ public struct DomainAssembly: Assembly {
             let repository = resolver.resolve(FoodRepository.self)!
             return FoodUseCaseImpl(repository: repository)
         }
+        
+        container.register(KeywordUseCase.self) { resolver in
+            let repository = resolver.resolve(KeywordRepository.self)!
+            return KeywordUseCaseImpl(repository: repository)
+        }
     }
-    
     
 }
