@@ -19,6 +19,7 @@ final class HomeViewController: BaseViewController<HomeReactor> {
     
     typealias Section = RxCollectionViewSectionedAnimatedDataSource<HomeSection>
     
+    private let addButton = ActionButton(frame: .zero)
     private let collectionViewFlowLayout = UICollectionViewFlowLayout()
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
     private lazy var dataSource = Section { section, collectionView, indexPath, item in
@@ -33,6 +34,14 @@ final class HomeViewController: BaseViewController<HomeReactor> {
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        view.addSubview(addButton)
+        addButton.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeArea.bottom).offset(-10)
+            make.trailing.equalToSuperview().offset(-20)
+            make.height.equalTo(48)
+            make.width.equalTo(100)
         }
     }
     
@@ -49,6 +58,11 @@ final class HomeViewController: BaseViewController<HomeReactor> {
             $0.backgroundColor = .systemGray
             $0.register(HomeCollectionViewCell.self)
         }
+        
+        addButton.do {
+            $0.style = .normal
+            $0.setTitle("추가", for: .normal)
+        }
     }
     
     override func bind(reactor: HomeReactor) {
@@ -63,6 +77,11 @@ extension HomeViewController {
     private func bindAction(reactor: Reactor) {
         rx.viewDidLoad
             .map { Reactor.Action.refresh }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        addButton.rx.tap
+            .map { Reactor.Action.addButtonTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
