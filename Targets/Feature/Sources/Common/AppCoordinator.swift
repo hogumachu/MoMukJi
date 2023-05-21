@@ -36,8 +36,11 @@ public final class AppCoordinatorImpl: AppCoordinator {
     
     public func start(root: Scene) {
         let rootViewController = factory.create(scene: root)
-        self.currentNavigationController = rootViewController.navigationController
-        UIApplication.keyWindow?.rootViewController = rootViewController
+        let navigationController = UINavigationController(rootViewController: rootViewController)
+        navigationController.setNavigationBarHidden(true, animated: false)
+        navigationController.interactivePopGestureRecognizer?.delegate = nil
+        self.currentNavigationController = navigationController
+        UIApplication.keyWindow?.rootViewController = navigationController
     }
     
     public func transition(to scene: Scene, using style: TransitionStyle, animated: Bool, completion: (() -> Void)?) {
@@ -49,10 +52,10 @@ public final class AppCoordinatorImpl: AppCoordinator {
         
         switch style {
         case .modal:
-            topNavigationController.pushViewController(viewController, animated: animated)
+            topNavigationController.present(viewController, animated: animated, completion: completion)
             
         case .push:
-            topNavigationController.present(viewController, animated: animated, completion: completion)
+            topNavigationController.pushViewController(viewController, animated: animated)
         }
     }
     
