@@ -15,6 +15,7 @@ public enum Scene {
     case intro
     case home
     case foodCreate
+    case categoryCreate
 }
 
 public protocol SceneFactory {
@@ -56,6 +57,12 @@ public final class SceneFactoryImpl: SceneFactory {
             )
             let reactor = FoodCreateReactor(dependency: dependency)
             let viewController = FoodCreateViewController(reactor: reactor)
+            return viewController
+            
+        case .categoryCreate:
+            let dependency = CategoryCreateReactor.Dependency()
+            let reactor = CategoryCreateReactor(dependency: dependency)
+            let viewController = CategoryCreateViewController(reactor: reactor)
             return viewController
         }
     }
