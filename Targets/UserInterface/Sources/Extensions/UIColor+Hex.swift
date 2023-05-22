@@ -41,4 +41,20 @@ extension UIColor {
         }
     }
     
+    public var hexString: String {
+        let components = cgColor.components
+        let r = components?[0] ?? 0
+        let g = components?[1] ?? 0
+        let b = components?[2] ?? 0
+        let a = components?[3] ?? 0
+        let hexString = String(
+            format: "#%02lX%02lX%02lX%02lX",
+            lroundf(Float(r * 255)),
+            lroundf(Float(g * 255)),
+            lroundf(Float(b * 255)),
+            lroundf(Float(a * 255))
+        )
+        return hexString
+    }
+    
 }
