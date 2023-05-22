@@ -133,7 +133,7 @@ private let settings = Settings.settings(configurations: [
 ])
 
 func makeTargets() -> [Target] {
-    let deploymentTarget = DeploymentTarget.iOS(targetVersion: "13.0", devices: [.iphone])
+    let deploymentTarget = DeploymentTarget.iOS(targetVersion: "14.0", devices: [.iphone])
     let appTargets = Project.createAppTarget(
         name: "MoMukJi",
         deploymentTarget: deploymentTarget,
