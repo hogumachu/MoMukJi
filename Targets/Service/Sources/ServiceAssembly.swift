@@ -22,6 +22,10 @@ public struct ServiceAssembly: Assembly {
         container.register(KeywordRepository.self) { resolver in
             return KeywordRepositoryImpl()
         }
+        
+        container.register(CategoryRepository.self) { resolver in
+            return CategoryRepositoryImpl(realm: try! Realm())
+        }
     }
     
 }
