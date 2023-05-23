@@ -14,7 +14,8 @@ import RealmSwift
 public enum Scene {
     case intro
     case home
-    case foodCreate
+    case foodCreate(Domain.Category)
+    case categoryList
     case categoryCreate
 }
 
@@ -49,18 +50,31 @@ public final class SceneFactoryImpl: SceneFactory {
             let viewController = HomeViewController(reactor: reactor)
             return viewController
             
-        case .foodCreate:
+        case .foodCreate(let category):
             let dependency = FoodCreateReactor.Dependency(
                 coordinator: coordinator,
                 foodUseCase: injector.resovle(FoodUseCase.self),
-                keywordUseCase: injector.resovle(KeywordUseCase.self)
+                keywordUseCase: injector.resovle(KeywordUseCase.self),
+                category: category
             )
             let reactor = FoodCreateReactor(dependency: dependency)
             let viewController = FoodCreateViewController(reactor: reactor)
             return viewController
             
+        case .categoryList:
+            let dependency = CategoryListReactor.Dependency(
+                coordinator: coordinator,
+                categoryUseCase: injector.resovle(CategoryUseCase.self)
+            )
+            let reactor = CategoryListReactor(dependency: dependency)
+            let viewController = CategoryListViewController(reactor: reactor)
+            return viewController
+            
         case .categoryCreate:
-            let dependency = CategoryCreateReactor.Dependency()
+            let dependency = CategoryCreateReactor.Dependency(
+                coordinator: coordinator,
+                categoryUseCase: injector.resovle(CategoryUseCase.self)
+            )
             let reactor = CategoryCreateReactor(dependency: dependency)
             let viewController = CategoryCreateViewController(reactor: reactor)
             return viewController
