@@ -21,7 +21,7 @@ final class FoodCreateViewController: BaseViewController<FoodCreateReactor> {
     
     private var addButtonBottomConstraint: Constraint?
     
-    private let tableView = UITableView(frame: .zero)
+    private let tableView = UITableView(frame: .zero, style: .grouped)
     private let categoriesView = UIView(frame: .zero)
     private let textField = UITextField(frame: .zero)
     private let addButton = ActionButton(frame: .zero)
@@ -32,17 +32,7 @@ final class FoodCreateViewController: BaseViewController<FoodCreateReactor> {
         cell.configure(item)
         return cell
     }
-    
-    
-    override init(reactor: Reactor) {
-        super.init(reactor: reactor)
-        modalPresentationStyle = .overFullScreen
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupKeyboardNotification()
@@ -79,6 +69,7 @@ final class FoodCreateViewController: BaseViewController<FoodCreateReactor> {
         view.backgroundColor = .white
         
         tableView.do {
+            $0.backgroundColor = .white
             $0.register(RecentSearchResultTableViewCell.self)
         }
         
@@ -136,7 +127,7 @@ extension FoodCreateViewController {
     
     private func bindAction(reactor: Reactor) {
         rx.viewDidLoad
-            .map { Reactor.Action.search(nil) }
+            .map { Reactor.Action.updateKeyword(nil) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         

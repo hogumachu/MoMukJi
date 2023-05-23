@@ -12,11 +12,13 @@ import Domain
 final class FoodCreateReactor: Reactor {
     
     typealias Section = FoodCreateSection
+    typealias Category = Domain.Category
     
     struct Dependency {
         let coordinator: AppCoordinator
         let foodUseCase: FoodUseCase
         let keywordUseCase: KeywordUseCase
+        let category: Category
     }
     
     var initialState = State(
