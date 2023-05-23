@@ -48,7 +48,7 @@ final class HomeReactor: Reactor {
             return .just(.setSections(sections))
             
         case .addButtonTap:
-            dependency.coordinator.transition(to: .foodCreate, using: .modal, animated: true, completion: nil)
+            dependency.coordinator.transition(to: .categoryList, using: .modal, animated: true, completion: nil)
             return .empty()
         }
     }
