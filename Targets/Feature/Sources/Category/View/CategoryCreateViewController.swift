@@ -167,7 +167,7 @@ extension CategoryCreateViewController {
             .disposed(by: disposeBag)
         
         labelColorChangeButton.rx.tap
-            .map { Reactor.Action.labelColorChangeButton }
+            .map { Reactor.Action.labelColorChangeButtonTap }
             .withUnretained(self)
             .subscribe(onNext: { this, action in
                 reactor.action.onNext(action)
@@ -177,6 +177,11 @@ extension CategoryCreateViewController {
         
         categoryTextField.rx.text
             .map(Reactor.Action.updateCategory)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        saveButton.rx.tap
+            .map { Reactor.Action.saveButtonTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

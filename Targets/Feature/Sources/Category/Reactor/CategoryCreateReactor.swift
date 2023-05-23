@@ -12,33 +12,35 @@ import ReactorKit
 
 final class CategoryCreateReactor: Reactor {
     
-    enum ColorState {
-        case backgrond
-        case label
-    }
-    
-    
-    struct Dependency {
-        
-    }
-    
     var initialState = State(
         category: nil,
         backgroundHexColor: "#EEEEEE",
         labelHexColor: "#000000",
         colorState: .backgrond
     )
+    
     private let dependency: Dependency
     
     init(dependency: Dependency) {
         self.dependency = dependency
     }
     
+    enum ColorState {
+        case backgrond
+        case label
+    }
+    
+    struct Dependency {
+        let coordinator: AppCoordinator
+        let categoryUseCase: CategoryUseCase
+    }
+    
     enum Action {
         case updateCategory(String?)
         case selectedHexColor(String)
         case backgroundColorChangeButtonTap
-        case labelColorChangeButton
+        case labelColorChangeButtonTap
+        case saveButtonTap
     }
     
     enum Mutation {
@@ -65,8 +67,19 @@ final class CategoryCreateReactor: Reactor {
         case .backgroundColorChangeButtonTap:
             return .just(.setColorState(.backgrond))
             
-        case .labelColorChangeButton:
+        case .labelColorChangeButtonTap:
             return .just(.setColorState(.label))
+            
+        case .saveButtonTap:
+            // TODO: - 중복 체크 (중복이면 Update 호출)
+            let category = Category(name: currentState.category ?? "", textColor: currentState.labelHexColor, backgroundColor: currentState.backgroundHexColor)
+            do {
+                try dependency.categoryUseCase.insert(category: category)
+                dependency.coordinator.close(using: .pop, animated: true, completion: nil)
+                return .empty()
+            } catch {
+                return .empty()
+            }
         }
     }
     
