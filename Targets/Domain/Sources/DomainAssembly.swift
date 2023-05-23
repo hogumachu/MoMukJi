@@ -22,6 +22,11 @@ public struct DomainAssembly: Assembly {
             let repository = resolver.resolve(KeywordRepository.self)!
             return KeywordUseCaseImpl(repository: repository)
         }
+        
+        container.register(CategoryUseCase.self) { resolver in
+            let repository = resolver.resolve(CategoryRepository.self)!
+            return CategoryUseCaseImpl(repository: repository)
+        }
     }
     
 }

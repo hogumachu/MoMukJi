@@ -45,7 +45,8 @@ public final class FoodRepositoryImpl: FoodRepository {
         try realm.write {
             guard let object = realm.objects(FoodObject.self)
                 .filter({ $0.name == food.name })
-                .first else {
+                .first
+            else {
                 return
             }
             realm.delete(object)

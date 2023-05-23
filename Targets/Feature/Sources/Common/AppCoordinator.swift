@@ -44,23 +44,32 @@ public final class AppCoordinatorImpl: AppCoordinator {
     }
     
     public func transition(to scene: Scene, using style: TransitionStyle, animated: Bool, completion: (() -> Void)?) {
-        guard let topNavigationController = UIViewController.topViewController as? UINavigationController else {
-            return
-        }
-        self.currentNavigationController = topNavigationController
+        guard let topViewController = UIViewController.topViewController else { return }
+        currentNavigationController = topViewController as? UINavigationController ?? topViewController.navigationController
         let viewController = factory.create(scene: scene)
         
         switch style {
         case .modal:
-            topNavigationController.present(viewController, animated: animated, completion: completion)
+            let navigationController = UINavigationController(rootViewController: viewController)
+            navigationController.setNavigationBarHidden(true, animated: false)
+            navigationController.interactivePopGestureRecognizer?.delegate = nil
+            navigationController.modalPresentationStyle = .overFullScreen
+            currentNavigationController = navigationController
+            topViewController.present(navigationController, animated: animated, completion: completion)
             
         case .push:
-            topNavigationController.pushViewController(viewController, animated: animated)
+            currentNavigationController?.pushViewController(viewController, animated: animated)
         }
     }
     
     public func close(using style: CloseStyle, animated: Bool, completion: (() -> Void)?) {
-        
+        switch style {
+        case .pop:
+            currentNavigationController?.popViewController(animated: animated)
+            
+        case .dismiss:
+            currentNavigationController?.dismiss(animated: animated, completion: completion)
+        }
     }
     
 }
