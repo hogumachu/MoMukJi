@@ -51,9 +51,9 @@ public struct NavigationViewModel {
     
     let type: NavigationViewType
     let title: String?
-    let font: UIFont
+    let font: UIFont?
     
-    public init(type: NavigationViewType, title: String?, font: UIFont = .systemFont(ofSize: 17, weight: .semibold)) {
+    public init(type: NavigationViewType, title: String?, font: UIFont? = .bodyR) {
         self.type = type
         self.title = title
         self.font = font
@@ -163,24 +163,24 @@ public final class NavigationView: UIView {
         backgroundColor = .clear
         
         titleLabel.do {
-            $0.textColor = .black
-            $0.font = .systemFont(ofSize: 17)
+            $0.textColor = .white
+            $0.font = .bodyR
             $0.textAlignment = .center
         }
         
         leftButton.do {
-            $0.tintColor = .black
+            $0.tintColor = .white
             $0.contentMode = .center
             $0.adjustsImageWhenHighlighted = true
         }
         
         rightButton.do {
-            $0.tintColor = .black
+            $0.tintColor = .white
             $0.adjustsImageWhenHighlighted = true
         }
         
         separator.do {
-            $0.backgroundColor = .black.withAlphaComponent(0.05)
+            $0.backgroundColor = .white.withAlphaComponent(0.05)
             $0.alpha = 0
         }
     }

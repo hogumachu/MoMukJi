@@ -21,10 +21,10 @@ public enum ActionButtonStyle {
     
     var defaultTextColor: UIColor? {
         switch self {
-        case .normal:           return .white
-        case .secondary:        return .systemBlue
-        case .small:            return .white
-        case .smallSecondary:   return .systemBlue
+        case .normal:           return .green1
+        case .secondary:        return .yellow1
+        case .small:            return .green1
+        case .smallSecondary:   return .yellow1
         case .alert:            return .white
         }
     }
@@ -35,34 +35,28 @@ public enum ActionButtonStyle {
     
     var defaultBackgroundColor: UIColor? {
         switch self {
-        case .normal:           return .systemBlue
-        case .secondary:        return .systemGray3
-        case .small:            return .systemBlue
-        case .smallSecondary:   return .systemGray3
+        case .normal:           return .pink3
+        case .secondary:        return .blue1
+        case .small:            return .pink3
+        case .smallSecondary:   return .blue1
         case .alert:            return .systemRed
         }
     }
     
     var highlightedBackgroundColor: UIColor? {
-        switch self {
-        case .normal:           return .systemBlue
-        case .secondary:        return .systemGray4
-        case .small:            return .systemBlue
-        case .smallSecondary:   return .systemGray4
-        case .alert:            return .systemRed
-        }
+        return defaultBackgroundColor
     }
     
     var disabledBackgroundColor: UIColor? {
-        return .systemGray3
+        return .monogray2
     }
     
     var font: UIFont? {
-        return .systemFont(ofSize: 17)
+        return .bodySB
     }
     
     var disabledFont: UIFont? {
-        return .systemFont(ofSize: 17)
+        return .bodySB
     }
     
 }

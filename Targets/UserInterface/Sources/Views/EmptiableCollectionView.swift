@@ -15,18 +15,18 @@ public struct EmptiableCollectionViewModel {
     
     let title: String
     let titleFont: UIFont
-    let titleColor: UIColor
+    let titleColor: UIColor?
     let description: String
     let descriptionFont: UIFont
-    let descriptionTexxtColor: UIColor
+    let descriptionTexxtColor: UIColor?
     
     public init(
         title: String,
-        titleFont: UIFont = .systemFont(ofSize: 20, weight: .semibold),
-        titleColor: UIColor = .black,
+        titleFont: UIFont = .headerSB,
+        titleColor: UIColor = .white,
         description: String,
-        descriptionFont: UIFont = .systemFont(ofSize: 17, weight: .regular),
-        descriptionTexxtColor: UIColor = .gray
+        descriptionFont: UIFont = .bodyR,
+        descriptionTexxtColor: UIColor? = .monogray1
     ) {
         self.title = title
         self.titleFont = titleFont
