@@ -10,7 +10,7 @@ import RealmSwift
 
 final class CategoryObject: Object {
     
-    @Persisted private(set) var name: String
+    @Persisted(primaryKey: true) private(set) var name: String
     @Persisted private(set) var textColor: String
     @Persisted private(set) var backgroundColor: String
     
