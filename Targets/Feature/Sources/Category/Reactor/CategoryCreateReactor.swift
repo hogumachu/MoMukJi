@@ -41,6 +41,7 @@ final class CategoryCreateReactor: Reactor {
         case backgroundColorChangeButtonTap
         case labelColorChangeButtonTap
         case saveButtonTap
+        case navigationLeftButtonTap
     }
     
     enum Mutation {
@@ -80,6 +81,10 @@ final class CategoryCreateReactor: Reactor {
             } catch {
                 return .empty()
             }
+            
+        case .navigationLeftButtonTap:
+            dependency.coordinator.close(using: .pop, animated: true, completion: nil)
+            return .empty()
         }
     }
     

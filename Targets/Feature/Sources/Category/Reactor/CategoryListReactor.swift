@@ -33,6 +33,7 @@ final class CategoryListReactor: Reactor {
         case refresh
         case addButtonTap
         case itemSelected(Item)
+        case navigationLeftButtonTap
     }
     
     enum Mutation {
@@ -59,6 +60,10 @@ final class CategoryListReactor: Reactor {
             }
             
             dependency.coordinator.transition(to: .foodCreate(category), using: .push, animated: true, completion: nil)
+            return .empty()
+            
+        case .navigationLeftButtonTap:
+            dependency.coordinator.close(using: .dismiss, animated: true, completion: nil)
             return .empty()
         }
     }

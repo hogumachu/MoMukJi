@@ -19,6 +19,7 @@ final class CategoryListViewController: BaseViewController<CategoryListReactor> 
     
     typealias Section = RxCollectionViewSectionedReloadDataSource<CategorySection>
     
+    private let navigationView = NavigationView(frame: .zero)
     private let addButton = ActionButton(frame: .zero)
     private let collectionViewFlowLayout = UICollectionViewFlowLayout()
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
@@ -31,6 +32,13 @@ final class CategoryListViewController: BaseViewController<CategoryListReactor> 
     }
     
     override func setupLayout() {
+        view.addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeArea.top)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(44)
+        }
+        
         view.addSubview(addButton)
         addButton.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeArea.bottom).offset(-10)
@@ -40,7 +48,7 @@ final class CategoryListViewController: BaseViewController<CategoryListReactor> 
         
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.equalTo(navigationView.snp.bottom)
             make.leading.trailing.equalToSuperview().inset(20)
             make.bottom.equalTo(addButton.snp.top)
         }
@@ -48,6 +56,10 @@ final class CategoryListViewController: BaseViewController<CategoryListReactor> 
     
     override func setupAttributes() {
         view.backgroundColor = .white
+        
+        navigationView.do {
+            $0.configure(.init(type: .close, title: nil))
+        }
         
         collectionViewFlowLayout.do {
             $0.itemSize = .init(width: (view.frame.width / 2) - 30, height: 60)
@@ -88,6 +100,11 @@ extension CategoryListViewController {
         
         collectionView.rx.itemSelected(dataSource: dataSource)
             .map(Reactor.Action.itemSelected)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        navigationView.rx.leftButtonTap
+            .map { Reactor.Action.navigationLeftButtonTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
