@@ -40,29 +40,30 @@ final class HomeViewController: BaseViewController<HomeReactor> {
         addButton.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeArea.bottom).offset(-10)
             make.trailing.equalToSuperview().offset(-20)
-            make.height.equalTo(48)
-            make.width.equalTo(100)
+            make.height.equalTo(60)
+            make.width.equalTo(120)
         }
     }
     
     override func setupAttributes() {
-        view.backgroundColor = .white
+        view.backgroundColor = .monoblack
         
         collectionViewFlowLayout.do {
-          $0.itemSize = .init(width: view.frame.width, height: 100)
+          $0.itemSize = .init(width: view.frame.width, height: 70)
           $0.scrollDirection = .vertical
           $0.minimumLineSpacing = 10
         }
         
         collectionView.do {
-            $0.backgroundColor = .white
+            $0.backgroundColor = .monoblack
             $0.register(HomeCollectionViewCell.self)
             $0.configure(.init(title: "추가된 음식이 없어요", description: "새로운 음식을 추가해주세요"))
         }
         
         addButton.do {
             $0.style = .normal
-            $0.setTitle("추가", for: .normal)
+            $0.setTitle("추가하기", for: .normal)
+            $0.layer.cornerRadius = 30
         }
     }
     
