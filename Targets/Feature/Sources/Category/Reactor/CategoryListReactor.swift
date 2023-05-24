@@ -54,7 +54,10 @@ final class CategoryListReactor: Reactor {
             return .empty()
             
         case .itemSelected(let item):
-            let category = Category(name: item.name, textColor: item.textColor, backgroundColor: item.backgroundColor)
+            guard let category = fetchCategory(item: item) else {
+                return .empty()
+            }
+            
             dependency.coordinator.transition(to: .foodCreate(category), using: .push, animated: true, completion: nil)
             return .empty()
         }
@@ -74,9 +77,14 @@ final class CategoryListReactor: Reactor {
 extension CategoryListReactor {
     
     private func makeCategorySections() -> [Section] {
-        let items = dependency.categoryUseCase.fetchCategoryList()
+        let items = dependency.categoryUseCase.fetchCategoryList(request: CategoryRequest())
             .map { Item(name: $0.name, textColor: $0.textColor, backgroundColor: $0.backgroundColor) }
         return [Section(items: items)]
+    }
+    
+    private func fetchCategory(item: CategoryItem) -> Category? {
+        let category = dependency.categoryUseCase.fetchCategoryList(request: CategoryRequest(category: item.name)).first
+        return category
     }
     
 }
