@@ -9,7 +9,7 @@ import Foundation
 
 public protocol CategoryUseCase {
     
-    func fetchCategoryList() -> [Category]
+    func fetchCategoryList(request: CategoryRequest) -> [Category]
     func insert(category: Category) throws
     func update(category: Category) throws
     func delete(category: Category) throws
@@ -24,8 +24,8 @@ public final class CategoryUseCaseImpl: CategoryUseCase {
         self.repository = repository
     }
     
-    public func fetchCategoryList() -> [Category] {
-        return repository.fetchCategoryList()
+    public func fetchCategoryList(request: CategoryRequest) -> [Category] {
+        return repository.fetchCategoryList(request: request)
     }
     
     public func insert(category: Category) throws {

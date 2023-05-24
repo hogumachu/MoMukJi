@@ -23,6 +23,7 @@ public protocol AppCoordinator {
     func start(root: Scene)
     func transition(to scene: Scene, using style: TransitionStyle, animated: Bool, completion: (() -> Void)?)
     func close(using style: CloseStyle, animated: Bool, completion: (() -> Void)?)
+    func refresh()
 }
 
 public final class AppCoordinatorImpl: AppCoordinator {
@@ -69,6 +70,15 @@ public final class AppCoordinatorImpl: AppCoordinator {
             
         case .dismiss:
             currentNavigationController?.dismiss(animated: animated, completion: completion)
+        }
+    }
+    
+    public func refresh() {
+        guard let topViewController = UIViewController.topViewController else { return }
+        if let navigationController = topViewController as? UINavigationController {
+            (navigationController.topViewController as? Refreshable)?.refresh()
+        } else {
+            (topViewController as? Refreshable)?.refresh()
         }
     }
     

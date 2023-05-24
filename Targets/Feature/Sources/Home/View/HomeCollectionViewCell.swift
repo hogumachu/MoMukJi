@@ -13,15 +13,18 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
     
     private let nameLabel = UILabel(frame: .zero)
     private let countLabel = UILabel(frame: .zero)
+    private let categoryLabel = UILabel(frame: .zero)
     
     func configure(_ item: HomeItem) {
         nameLabel.text = item.name
         countLabel.text = "\(item.count)회"
+        categoryLabel.text = item.category
     }
     
     override func clear() {
         nameLabel.text = nil
         countLabel.text = nil
+        categoryLabel.text = nil
     }
     
     override func setupLayout() {
@@ -34,6 +37,11 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         countLabel.snp.makeConstraints { make in
             make.top.equalTo(nameLabel.snp.bottom).offset(5)
             make.leading.trailing.bottom.equalToSuperview().inset(20)
+        }
+        
+        contentView.addSubview(categoryLabel)
+        categoryLabel.snp.makeConstraints { make in
+            make.top.trailing.equalToSuperview().inset(20)
         }
     }
     

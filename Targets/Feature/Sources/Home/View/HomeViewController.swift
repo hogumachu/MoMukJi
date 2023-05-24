@@ -17,7 +17,7 @@ import Then
 
 final class HomeViewController: BaseViewController<HomeReactor> {
     
-    typealias Section = RxCollectionViewSectionedAnimatedDataSource<HomeSection>
+    typealias Section = RxCollectionViewSectionedReloadDataSource<HomeSection>
     
     private let addButton = ActionButton(frame: .zero)
     private let collectionViewFlowLayout = UICollectionViewFlowLayout()
@@ -90,6 +90,14 @@ extension HomeViewController {
         reactor.state.map(\.sections)
             .bind(to: collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+    }
+    
+}
+
+extension HomeViewController: Refreshable {
+    
+    func refresh() {
+        reactor?.action.onNext(.refresh)
     }
     
 }

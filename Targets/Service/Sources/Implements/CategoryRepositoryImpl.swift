@@ -19,8 +19,12 @@ public final class CategoryRepositoryImpl: CategoryRepository {
         self.realm = realm
     }
     
-    public func fetchCategoryList() -> [Category] {
+    public func fetchCategoryList(request: CategoryRequest) -> [Category] {
         var objects = realm.objects(CategoryObject.self)
+        
+        if let predicate = request.predicate {
+            objects = objects.filter(predicate)
+        }
         
         return objects
             .compactMap { $0.model }
@@ -28,7 +32,8 @@ public final class CategoryRepositoryImpl: CategoryRepository {
     
     public func insert(category: Category) throws {
         try realm.write {
-            realm.add(category.object())
+            let categoryObject = category.object()
+            realm.add(categoryObject, update: .modified)
         }
     }
     

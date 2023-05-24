@@ -9,7 +9,7 @@ import Foundation
 
 public protocol CategoryRepository {
     
-    func fetchCategoryList() -> [Category]
+    func fetchCategoryList(request: CategoryRequest) -> [Category]
     func insert(category: Category) throws
     func update(category: Category) throws
     func delete(category: Category) throws
