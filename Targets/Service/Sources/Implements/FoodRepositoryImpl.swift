@@ -31,9 +31,8 @@ public final class FoodRepositoryImpl: FoodRepository {
     
     public func insert(food: Food) throws {
         try realm.write {
-            realm.add(food.object())
+            realm.add(food.object(), update: .modified)
         }
-        
     }
     
     public func update(food: Food) throws {

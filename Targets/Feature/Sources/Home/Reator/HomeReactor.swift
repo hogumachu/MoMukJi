@@ -13,6 +13,7 @@ import ReactorKit
 final class HomeReactor: Reactor {
     
     typealias Section = HomeSection
+    typealias Item = HomeItem
     
     var initialState = State(sections: [])
     private let dependency: Dependency
@@ -42,9 +43,8 @@ final class HomeReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .refresh:
-//            let foods = fetchFoodList()
-//            let sections = makeSections(foods: foods)
-            let sections = makeMockSections()
+            let foods = fetchFoodList()
+            let sections = makeSections(foods: foods)
             return .just(.setSections(sections))
             
         case .addButtonTap:
@@ -68,28 +68,14 @@ extension HomeReactor {
     
     private func fetchFoodList() -> [Food] {
         return dependency.foodUseCase
-            .fetchFoodList(request: FoodRequest())
+            .fetchFoodList(request: FoodRequest(category: nil))
     }
     
     private func makeSections(foods: [Food]) -> [Section] {
-        return Set<String>(foods.map(\.category))
-            .sorted(by: <)
-            .map { category -> Section in
-                let items = foods
-                    .filter { $0.category == category }
-                    .map { Section.Item(name: $0.name, count: $0.count)}
-                    .sorted { $0.count > $1.count }
-                return Section(category: category, items: items)
-            }
-    }
-    
-    private func makeMockSections() -> [Section] {
-        return [
-            Section(category: "한식", items: [.init(name: "김치찌개", count: 6), .init(name: "된장찌개", count: 5)]),
-            Section(category: "양식", items: [.init(name: "파스타", count: 3), .init(name: "피자", count: 1)]),
-            Section(category: "아시안", items: [.init(name: "쌀국수", count: 4)]),
-            Section(category: "일식", items: [.init(name: "돈가스", count: 5), .init(name: "우동", count: 4)])
-        ]
+        let items = foods.map { food -> Item in
+            return Item(name: food.name, count: food.count, category: food.category?.name)
+        }
+        return [Section(items: items)]
     }
     
 }

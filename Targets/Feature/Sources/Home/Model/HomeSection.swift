@@ -9,7 +9,6 @@ import RxDataSources
 
 struct HomeSection: Equatable {
     
-    let category: String
     var items: [HomeItem]
     
 }
@@ -22,16 +21,13 @@ struct HomeItem: Equatable, IdentifiableType {
     
     let name: String
     let count: Int
+    let category: String?
     
 }
 
-extension HomeSection: AnimatableSectionModelType {
+extension HomeSection: SectionModelType {
     
     typealias Item = HomeItem
-    
-    var identity: String {
-        return category
-    }
     
     init(original: HomeSection, items: [HomeItem]) {
         self = original
