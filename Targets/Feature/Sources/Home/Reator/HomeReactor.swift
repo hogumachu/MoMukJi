@@ -75,6 +75,9 @@ extension HomeReactor {
         let items = foods.map { food -> Item in
             return Item(name: food.name, count: food.count, category: food.category?.name)
         }
+        if items.isEmpty {
+            return []
+        }
         return [Section(items: items)]
     }
     

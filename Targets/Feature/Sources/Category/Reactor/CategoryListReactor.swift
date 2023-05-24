@@ -84,6 +84,10 @@ extension CategoryListReactor {
     private func makeCategorySections() -> [Section] {
         let items = dependency.categoryUseCase.fetchCategoryList(request: CategoryRequest())
             .map { Item(name: $0.name, textColor: $0.textColor, backgroundColor: $0.backgroundColor) }
+        if items.isEmpty {
+            return []
+        }
+        
         return [Section(items: items)]
     }
     

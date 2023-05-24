@@ -21,7 +21,7 @@ final class HomeViewController: BaseViewController<HomeReactor> {
     
     private let addButton = ActionButton(frame: .zero)
     private let collectionViewFlowLayout = UICollectionViewFlowLayout()
-    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
+    private lazy var collectionView = EmptiableCollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
     private lazy var dataSource = Section { section, collectionView, indexPath, item in
         guard let cell = collectionView.dequeueCell(HomeCollectionViewCell.self, for: indexPath) else {
             return UICollectionViewCell()
@@ -55,8 +55,9 @@ final class HomeViewController: BaseViewController<HomeReactor> {
         }
         
         collectionView.do {
-            $0.backgroundColor = .systemGray
+            $0.backgroundColor = .white
             $0.register(HomeCollectionViewCell.self)
+            $0.configure(.init(title: "추가된 음식이 없어요", description: "새로운 음식을 추가해주세요"))
         }
         
         addButton.do {
@@ -89,6 +90,11 @@ extension HomeViewController {
     private func bindState(reactor: Reactor) {
         reactor.state.map(\.sections)
             .bind(to: collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        reactor.state.map(\.sections)
+            .map { $0.isEmpty == false }
+            .bind(to: collectionView.rx.isEmptyViewHidden)
             .disposed(by: disposeBag)
     }
     
