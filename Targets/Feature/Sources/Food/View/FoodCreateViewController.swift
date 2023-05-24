@@ -127,7 +127,7 @@ extension FoodCreateViewController {
     
     private func bindAction(reactor: Reactor) {
         rx.viewDidLoad
-            .map { Reactor.Action.updateKeyword(nil) }
+            .map { Reactor.Action.refresh }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
@@ -138,12 +138,12 @@ extension FoodCreateViewController {
             .disposed(by: disposeBag)
         
         tableView.rx.itemSelected(dataSource: dataSource)
-            .map(Reactor.Action.search)
+            .map(Reactor.Action.itemSeleted)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
         addButton.rx.tap
-            .map { Reactor.Action.search(nil) }
+            .map { Reactor.Action.addButtonTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

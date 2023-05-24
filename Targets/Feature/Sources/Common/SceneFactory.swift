@@ -53,8 +53,8 @@ public final class SceneFactoryImpl: SceneFactory {
         case .foodCreate(let category):
             let dependency = FoodCreateReactor.Dependency(
                 coordinator: coordinator,
+                categoryUseCase: injector.resovle(CategoryUseCase.self),
                 foodUseCase: injector.resovle(FoodUseCase.self),
-                keywordUseCase: injector.resovle(KeywordUseCase.self),
                 category: category
             )
             let reactor = FoodCreateReactor(dependency: dependency)
