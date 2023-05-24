@@ -22,7 +22,7 @@ final class CategoryListViewController: BaseViewController<CategoryListReactor> 
     private let navigationView = NavigationView(frame: .zero)
     private let addButton = ActionButton(frame: .zero)
     private let collectionViewFlowLayout = UICollectionViewFlowLayout()
-    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
+    private lazy var collectionView = EmptiableCollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
     private lazy var dataSource = Section { section, collectionView, indexPath, item in
         guard let cell = collectionView.dequeueCell(CategoryListCollectionViewCell.self, for: indexPath) else {
             return UICollectionViewCell()
@@ -58,7 +58,7 @@ final class CategoryListViewController: BaseViewController<CategoryListReactor> 
         view.backgroundColor = .white
         
         navigationView.do {
-            $0.configure(.init(type: .close, title: nil))
+            $0.configure(.init(type: .close, title: "카테고리"))
         }
         
         collectionViewFlowLayout.do {
@@ -70,11 +70,13 @@ final class CategoryListViewController: BaseViewController<CategoryListReactor> 
         collectionView.do {
             $0.backgroundColor = .white
             $0.register(CategoryListCollectionViewCell.self)
+            $0.configure(.init(title: "카테고리가 없어요", description: "새로운 카테고리를 추가해주세요"))
         }
         
         addButton.do {
             $0.style = .normal
             $0.setTitle("카테고리 추가하기", for: .normal)
+            $0.layer.cornerRadius = 16
         }
     }
     
@@ -112,6 +114,11 @@ extension CategoryListViewController {
     private func bindState(reactor: Reactor) {
         reactor.state.map(\.sections)
             .bind(to: collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        reactor.state.map(\.sections)
+            .map { $0.isEmpty == false }
+            .bind(to: collectionView.rx.isEmptyViewHidden)
             .disposed(by: disposeBag)
     }
     

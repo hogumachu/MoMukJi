@@ -20,7 +20,6 @@ final class CategoryCreateViewController: BaseViewController<CategoryCreateReact
     
     private let navigationView = NavigationView(frame: .zero)
     private let categoryContainerView = UIView(frame: .zero)
-    private let categoryLabel = UILabel(frame: .zero)
     private let categoryTextField = UITextField(frame: .zero)
     private let changeButtonStackView = UIStackView(frame: .zero)
     private let backgroundColorChangeButton = ActionButton(frame: .zero)
@@ -47,9 +46,15 @@ final class CategoryCreateViewController: BaseViewController<CategoryCreateReact
         
         view.addSubview(categoryContainerView)
         categoryContainerView.snp.makeConstraints { make in
-            make.height.equalTo(100)
+            make.height.equalTo(50)
             make.leading.trailing.equalToSuperview().inset(20)
             make.top.equalTo(navigationView.snp.bottom)
+        }
+        
+        categoryContainerView.addSubview(categoryTextField)
+        categoryTextField.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.centerY.equalToSuperview()
         }
         
         view.addSubview(saveButton)
@@ -57,13 +62,6 @@ final class CategoryCreateViewController: BaseViewController<CategoryCreateReact
             make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(48)
             saveButtonBottomConstraint = make.bottom.equalTo(view.safeArea.bottom).constraint
-        }
-        
-        view.addSubview(categoryTextField)
-        categoryTextField.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(60)
-            make.bottom.equalTo(saveButton.snp.top).offset(-10)
         }
         
         view.addSubview(changeButtonStackView)
@@ -75,11 +73,6 @@ final class CategoryCreateViewController: BaseViewController<CategoryCreateReact
         
         changeButtonStackView.addArrangedSubview(backgroundColorChangeButton)
         changeButtonStackView.addArrangedSubview(labelColorChangeButton)
-        
-        categoryContainerView.addSubview(categoryLabel)
-        categoryLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(20)
-        }
     }
     
     override func setupAttributes() {
@@ -93,15 +86,9 @@ final class CategoryCreateViewController: BaseViewController<CategoryCreateReact
             $0.layer.cornerRadius = 16
         }
         
-        categoryLabel.do {
-            $0.textAlignment = .center
-            $0.text = "하단에 텍스트를 입력해주세요"
-        }
-        
         categoryTextField.do {
-            $0.layer.borderColor = UIColor.black.cgColor
-            $0.layer.borderWidth = 0.1
-            $0.layer.cornerRadius = 16
+            $0.backgroundColor = .clear
+            $0.placeholder = "카테고리를 입력해주세요"
         }
         
         changeButtonStackView.do {
@@ -204,11 +191,6 @@ extension CategoryCreateViewController {
     }
     
     private func bindState(reactor: Reactor) {
-        reactor.state.map(\.category)
-            .distinctUntilChanged()
-            .bind(to: categoryLabel.rx.text)
-            .disposed(by: disposeBag)
-        
         reactor.state.map(\.backgroundHexColor)
             .compactMap { $0 }
             .map { UIColor(hex: $0) }
@@ -218,7 +200,7 @@ extension CategoryCreateViewController {
         reactor.state.map(\.labelHexColor)
             .compactMap { $0 }
             .map { UIColor(hex: $0) }
-            .bind(to: categoryLabel.rx.textColor)
+            .bind(to: categoryTextField.rx.textColor)
             .disposed(by: disposeBag)
     }
     

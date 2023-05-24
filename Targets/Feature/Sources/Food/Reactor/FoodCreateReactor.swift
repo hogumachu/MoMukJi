@@ -23,17 +23,17 @@ final class FoodCreateReactor: Reactor {
     
     var initialState = State(
         keyword: nil,
-        sections: [],
-        foods: []
+        sections: []
     )
     private let dependency: Dependency
+    private var foods: [Food] = []
     
     init(dependency: Dependency) {
         self.dependency = dependency
+        self.foods = fetchFoodList()
     }
     
     enum Action {
-        case refresh
         case updateKeyword(String?)
         case itemSeleted(String)
         case addButtonTap
@@ -41,7 +41,6 @@ final class FoodCreateReactor: Reactor {
     }
     
     enum Mutation {
-        case setFoods([Food])
         case setKeyword(String)
         case setSections([Section])
     }
@@ -49,19 +48,10 @@ final class FoodCreateReactor: Reactor {
     struct State {
         var keyword: String?
         var sections: [Section]
-        var foods: [Food]
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .refresh:
-            let foods = fetchFoodList()
-            return .concat([
-                .just(.setFoods(foods)),
-                .just(.setKeyword("")),
-                .just(.setSections(makeRecentKeywordSections(keyword: "")))
-            ])
-            
         case .updateKeyword(let keyword):
             return .concat([
                 .just(.setKeyword(keyword ?? "")),
@@ -105,9 +95,6 @@ final class FoodCreateReactor: Reactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
-        case .setFoods(let foods):
-            newState.foods = foods
-            
         case .setKeyword(let keyword):
             newState.keyword = keyword
             
@@ -126,12 +113,12 @@ extension FoodCreateReactor {
     }
     
     private func makeRecentKeywordSections(keyword: String?) -> [Section] {
-        let foods = currentState.foods.map { $0.name }
-        guard let keyword else {
-            return [Section(items: foods)]
+        let foods = foods.map { $0.name }
+        guard let keyword, keyword.isEmpty == false else {
+            return foods.isEmpty ? [] : [Section(items: foods)]
         }
-        
-        return [Section(items: foods.filter { $0.contains(keyword) })]
+        let filteredFoods = foods.filter { $0.contains(keyword) }
+        return filteredFoods.isEmpty ? [] : [Section(items: filteredFoods)]
     }
     
     private func makeCurrentFood(name: String? = nil) -> Food? {
