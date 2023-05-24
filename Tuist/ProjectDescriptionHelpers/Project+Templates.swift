@@ -114,7 +114,7 @@ extension Project {
             "UIMainStoryboardFile": "",
             "CFBundleDisplayName": "$(PRODUCT_NAME)",
             "UILaunchStoryboardName": "LaunchScreen",
-            "UIUserInterfaceStyle": "Light",
+            "UIUserInterfaceStyle": "Dark",
             "UISupportedInterfaceOrientations": ["UIInterfaceOrientationPortrait"],
             "UIApplicationSceneManifest": [
               "UIApplicationSupportsMultipleScenes": false,

@@ -9,7 +9,7 @@ import UIKit
 
 public final class NavigationViewButton: UIButton {
     
-    public var imageTintColor: UIColor = .gray {
+    public var imageTintColor: UIColor = .white {
         didSet {
             self.tintColor = self.imageTintColor
         }
@@ -18,7 +18,7 @@ public final class NavigationViewButton: UIButton {
     public override var isHighlighted: Bool {
         didSet {
             if self.isHighlighted {
-                self.tintColor = .gray
+                self.tintColor = .monogray1
             } else {
                 self.tintColor = self.imageTintColor
             }

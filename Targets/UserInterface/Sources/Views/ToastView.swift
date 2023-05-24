@@ -84,7 +84,7 @@ final class ToastView: UIView {
     
     private func setupAttributes() {
         clipsToBounds = true
-        backgroundColor = .black.withAlphaComponent(0.7)
+        backgroundColor = .white.withAlphaComponent(0.3)
         layer.cornerRadius = 8
         
         imageView.do {
@@ -94,7 +94,7 @@ final class ToastView: UIView {
         
         messageLabel.do {
             $0.textColor = .white
-            $0.font = .systemFont(ofSize: 13, weight: .semibold)
+            $0.font = .captionSB
         }
     }
     
