@@ -18,6 +18,7 @@ final class CategoryCreateViewController: BaseViewController<CategoryCreateReact
     
     private var saveButtonBottomConstraint: Constraint?
     
+    private let navigationView = NavigationView(frame: .zero)
     private let categoryContainerView = UIView(frame: .zero)
     private let categoryLabel = UILabel(frame: .zero)
     private let categoryTextField = UITextField(frame: .zero)
@@ -37,11 +38,18 @@ final class CategoryCreateViewController: BaseViewController<CategoryCreateReact
     }
     
     override func setupLayout() {
+        view.addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeArea.top)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(44)
+        }
+        
         view.addSubview(categoryContainerView)
         categoryContainerView.snp.makeConstraints { make in
             make.height.equalTo(100)
             make.leading.trailing.equalToSuperview().inset(20)
-            make.top.equalTo(view.safeArea.top).offset(20)
+            make.top.equalTo(navigationView.snp.bottom)
         }
         
         view.addSubview(saveButton)
@@ -76,6 +84,10 @@ final class CategoryCreateViewController: BaseViewController<CategoryCreateReact
     
     override func setupAttributes() {
         view.backgroundColor = .white
+        
+        navigationView.do {
+            $0.configure(.init(type: .back, title: nil))
+        }
         
         categoryContainerView.do {
             $0.layer.cornerRadius = 16
@@ -182,6 +194,11 @@ extension CategoryCreateViewController {
         
         saveButton.rx.tap
             .map { Reactor.Action.saveButtonTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        navigationView.rx.leftButtonTap
+            .map { Reactor.Action.navigationLeftButtonTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

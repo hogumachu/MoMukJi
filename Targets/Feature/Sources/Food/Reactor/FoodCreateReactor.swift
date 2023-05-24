@@ -37,6 +37,7 @@ final class FoodCreateReactor: Reactor {
         case updateKeyword(String?)
         case itemSeleted(String)
         case addButtonTap
+        case navigationLeftButtonTap
     }
     
     enum Mutation {
@@ -94,6 +95,10 @@ final class FoodCreateReactor: Reactor {
             } catch {
                 return .empty()
             }
+            
+        case .navigationLeftButtonTap:
+            dependency.coordinator.close(using: .pop, animated: true, completion: nil)
+            return .empty()
         }
     }
     

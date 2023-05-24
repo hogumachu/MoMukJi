@@ -21,6 +21,7 @@ final class FoodCreateViewController: BaseViewController<FoodCreateReactor> {
     
     private var addButtonBottomConstraint: Constraint?
     
+    private let navigationView = NavigationView(frame: .zero)
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private let categoriesView = UIView(frame: .zero)
     private let textField = UITextField(frame: .zero)
@@ -44,6 +45,13 @@ final class FoodCreateViewController: BaseViewController<FoodCreateReactor> {
     }
     
     override func setupLayout() {
+        view.addSubview(navigationView)
+        navigationView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeArea.top)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(44)
+        }
+        
         view.addSubview(addButton)
         addButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
@@ -60,13 +68,18 @@ final class FoodCreateViewController: BaseViewController<FoodCreateReactor> {
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
+            make.top.equalTo(navigationView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(textField.snp.top)
         }
     }
     
     override func setupAttributes() {
         view.backgroundColor = .white
+        
+        navigationView.do {
+            $0.configure(.init(type: .back, title: nil))
+        }
         
         tableView.do {
             $0.backgroundColor = .white
@@ -144,6 +157,11 @@ extension FoodCreateViewController {
         
         addButton.rx.tap
             .map { Reactor.Action.addButtonTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        navigationView.rx.leftButtonTap
+            .map { Reactor.Action.navigationLeftButtonTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
