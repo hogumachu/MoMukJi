@@ -73,7 +73,7 @@ extension HomeReactor {
     
     private func makeSections(foods: [Food]) -> [Section] {
         let items = foods.map { food -> Item in
-            return Item(name: food.name, count: food.count, category: food.category?.name)
+            return Item(name: food.name, count: food.count, category: food.category)
         }
         if items.isEmpty {
             return []

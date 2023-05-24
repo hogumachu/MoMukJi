@@ -5,6 +5,7 @@
 //  Created by 홍성준 on 2023/05/20.
 //
 
+import Domain
 import RxDataSources
 
 struct HomeSection: Equatable {
@@ -15,13 +16,18 @@ struct HomeSection: Equatable {
 
 struct HomeItem: Equatable, IdentifiableType {
     
+    static func == (lhs: HomeItem, rhs: HomeItem) -> Bool {
+        lhs.identity == rhs.identity
+    }
+    
+    
     var identity: String {
         return name
     }
     
     let name: String
     let count: Int
-    let category: String?
+    let category: Domain.Category?
     
 }
 
