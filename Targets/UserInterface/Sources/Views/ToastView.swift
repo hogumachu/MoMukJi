@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Then
+import Lottie
 
 public struct ToastModel {
     
@@ -33,7 +34,7 @@ final class ToastView: UIView {
     
     private let containerView = UIView(frame: .zero)
     private let messageLabel = UILabel(frame: .zero)
-    private let imageView = UIImageView(frame: .zero)
+    private let imageView = LottieAnimationView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,21 +46,26 @@ final class ToastView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public func play() {
+        imageView.play()
+    }
+    
+    public func stop() {
+        imageView.stop()
+    }
+    
     public func configure(_ model: ToastModel) {
         messageLabel.text = model.message
         
         switch model.type {
         case .normal:
-            imageView.image = UIImage(systemName: "checkmark.circle")?.withRenderingMode(.alwaysTemplate)
-            imageView.tintColor = .white
+            imageView.animation = LottieAnimation.named("lottie-check")
             
         case .success:
-            imageView.image = UIImage(systemName: "checkmark.circle.fill")?.withRenderingMode(.alwaysTemplate)
-            imageView.tintColor = .systemGreen
+            imageView.animation = LottieAnimation.named("lottie-check")
             
         case .fail:
-            imageView.image = UIImage(systemName: "xmark.circle.fill")?.withRenderingMode(.alwaysTemplate)
-            imageView.tintColor = .systemRed
+            imageView.animation = LottieAnimation.named("lottie-x-mark")
         }
         
         self.containerView.snp.remakeConstraints { make in
@@ -71,30 +77,31 @@ final class ToastView: UIView {
         addSubview(containerView)
         containerView.addSubview(imageView)
         imageView.snp.makeConstraints { make in
-            make.size.equalTo(CGSize(width: 20, height: 20))
+            make.size.equalTo(CGSize(width: 35, height: 35))
             make.top.leading.bottom.equalToSuperview()
         }
         
         containerView.addSubview(messageLabel)
         messageLabel.snp.makeConstraints { make in
-            make.leading.equalTo(imageView.snp.trailing).offset(5)
+            make.leading.equalTo(imageView.snp.trailing)
             make.centerY.trailing.equalToSuperview()
         }
     }
     
     private func setupAttributes() {
         clipsToBounds = true
-        backgroundColor = .white.withAlphaComponent(0.3)
-        layer.cornerRadius = 8
+        backgroundColor = .white.withAlphaComponent(0.9)
+        layer.cornerRadius = 16
         
         imageView.do {
-            $0.image = UIImage(systemName: "checkmark.circle")?.withRenderingMode(.alwaysTemplate)
-            $0.tintColor = .white
+            $0.backgroundColor = .clear
+            $0.contentMode = .scaleAspectFit
+            $0.loopMode = .playOnce
         }
         
         messageLabel.do {
-            $0.textColor = .white
-            $0.font = .captionSB
+            $0.textColor = .monoblack
+            $0.font = .bodySB
         }
     }
     
