@@ -55,20 +55,21 @@ final class CategoryListViewController: BaseViewController<CategoryListReactor> 
     }
     
     override func setupAttributes() {
-        view.backgroundColor = .white
+        view.backgroundColor = .monoblack
         
         navigationView.do {
+            $0.backgroundColor = .clear
             $0.configure(.init(type: .close, title: "카테고리"))
         }
         
         collectionViewFlowLayout.do {
-            $0.itemSize = .init(width: (view.frame.width / 2) - 30, height: 60)
+            $0.itemSize = .init(width: (view.frame.width / 2) - 30, height: 50)
             $0.scrollDirection = .vertical
             $0.minimumLineSpacing = 10
         }
         
         collectionView.do {
-            $0.backgroundColor = .white
+            $0.backgroundColor = .monoblack
             $0.register(CategoryListCollectionViewCell.self)
             $0.configure(.init(title: "카테고리가 없어요", description: "새로운 카테고리를 추가해주세요"))
         }
@@ -76,7 +77,7 @@ final class CategoryListViewController: BaseViewController<CategoryListReactor> 
         addButton.do {
             $0.style = .normal
             $0.setTitle("카테고리 추가하기", for: .normal)
-            $0.layer.cornerRadius = 16
+            $0.layer.cornerRadius = 24
         }
     }
     

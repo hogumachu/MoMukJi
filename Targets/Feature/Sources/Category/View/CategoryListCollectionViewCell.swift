@@ -29,17 +29,18 @@ final class CategoryListCollectionViewCell: BaseCollectionViewCell {
     override func setupLayout() {
         contentView.addSubview(categoryLabel)
         categoryLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(20)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.centerY.equalToSuperview()
         }
     }
     
     override func setupAttributes() {
         backgroundColor = .white
-        layer.cornerRadius = 16
+        layer.cornerRadius = 25
         
         categoryLabel.do {
             $0.textColor = .black
-            $0.font = .systemFont(ofSize: 17, weight: .regular)
+            $0.font = .bodyB
             $0.textAlignment = .center
             $0.numberOfLines = 1
             $0.lineBreakMode = .byTruncatingTail
