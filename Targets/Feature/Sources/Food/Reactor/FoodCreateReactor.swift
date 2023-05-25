@@ -12,6 +12,7 @@ import Domain
 final class FoodCreateReactor: Reactor {
     
     typealias Section = FoodCreateSection
+    typealias Item = FoodSearchResultTableViewCellModel
     typealias Category = Domain.Category
     
     struct Dependency {
@@ -21,21 +22,19 @@ final class FoodCreateReactor: Reactor {
         let category: Category
     }
     
-    var initialState = State(
-        keyword: nil,
-        sections: []
-    )
+    var initialState: State
     private let dependency: Dependency
     private var foods: [Food] = []
     
     init(dependency: Dependency) {
         self.dependency = dependency
+        self.initialState = State(category: dependency.category.name, keyword: nil, sections: [])
         self.foods = fetchFoodList()
     }
     
     enum Action {
         case updateKeyword(String?)
-        case itemSeleted(String)
+        case itemSeleted(Item)
         case addButtonTap
         case navigationLeftButtonTap
     }
@@ -46,6 +45,7 @@ final class FoodCreateReactor: Reactor {
     }
     
     struct State {
+        var category: String
         var keyword: String?
         var sections: [Section]
     }
@@ -58,11 +58,9 @@ final class FoodCreateReactor: Reactor {
                 .just(.setSections(makeRecentKeywordSections(keyword: keyword)))
             ])
             
-        case .itemSeleted(let keyword):
-            guard let food = makeCurrentFood(name: keyword) else {
-                return .empty()
-            }
+        case .itemSeleted(let item):
             do {
+                let food = makeCurrentFood(item: item)
                 try dependency.foodUseCase.insert(food: food)
                 dependency.coordinator.close(using: .dismiss, animated: true) { [weak self] in
                     self?.dependency.coordinator.refresh()
@@ -113,18 +111,23 @@ extension FoodCreateReactor {
     }
     
     private func makeRecentKeywordSections(keyword: String?) -> [Section] {
-        let foods = foods.map { $0.name }
         guard let keyword, keyword.isEmpty == false else {
-            return foods.isEmpty ? [] : [Section(items: foods)]
+            return foods.isEmpty ? [] : [Section(items: foods.map { Item(food: $0.name, count: $0.count) })]
         }
-        let filteredFoods = foods.filter { $0.contains(keyword) }
+        let filteredFoods = foods.filter { $0.name.contains(keyword) }
+            .map { Item(food: $0.name, count: $0.count) }
         return filteredFoods.isEmpty ? [] : [Section(items: filteredFoods)]
     }
     
-    private func makeCurrentFood(name: String? = nil) -> Food? {
-        let name = name ?? (currentState.keyword ?? "")
+    private func makeCurrentFood() -> Food? {
+        let name = currentState.keyword ?? ""
         let count = dependency.foodUseCase.fetchFoodList(request: FoodRequest(name: name)).first?.count ?? 0
         return Food(name: name, count: count + 1, category: dependency.category)
+    }
+    
+    private func makeCurrentFood(item: Item) -> Food {
+        let name = item.food
+        return Food(name: name, count: item.count + 1, category: dependency.category)
     }
     
 }

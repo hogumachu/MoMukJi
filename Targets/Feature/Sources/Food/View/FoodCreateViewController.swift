@@ -24,11 +24,10 @@ final class FoodCreateViewController: BaseViewController<FoodCreateReactor> {
     private let navigationView = NavigationView(frame: .zero)
     private let tableView = EmptiableTableView(frame: .zero, style: .grouped)
     private let categoriesView = UIView(frame: .zero)
-    private let textContainerView = UIView(frame: .zero)
-    private let textField = UITextField(frame: .zero)
+    private let textField = TextFiled(frame: .zero)
     private let addButton = ActionButton(frame: .zero)
     private lazy var dataSource = Section { section, tableView, indexPath, item in
-        guard let cell = tableView.dequeueCell(RecentSearchResultTableViewCell.self, for: indexPath) else {
+        guard let cell = tableView.dequeueCell(FoodSearchResultTableViewCell.self, for: indexPath) else {
             return UITableViewCell()
         }
         cell.configure(item)
@@ -53,17 +52,11 @@ final class FoodCreateViewController: BaseViewController<FoodCreateReactor> {
             make.height.equalTo(44)
         }
         
-        view.addSubview(textContainerView)
-        textContainerView.snp.makeConstraints { make in
-            make.height.equalTo(50)
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.top.equalTo(navigationView.snp.bottom)
-        }
-        
-        textContainerView.addSubview(textField)
+        view.addSubview(textField)
         textField.snp.makeConstraints { make in
+            make.top.equalTo(navigationView.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview().inset(20)
-            make.centerY.equalToSuperview()
+            make.height.equalTo(50)
         }
         
         view.addSubview(addButton)
@@ -75,38 +68,37 @@ final class FoodCreateViewController: BaseViewController<FoodCreateReactor> {
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(textContainerView.snp.bottom)
+            make.top.equalTo(textField.snp.bottom)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(addButton.snp.top)
         }
     }
     
     override func setupAttributes() {
-        view.backgroundColor = .white
+        view.backgroundColor = .monoblack
         
         navigationView.do {
-            $0.configure(.init(type: .back, title: "음식"))
-        }
-        
-        textContainerView.do {
-            $0.layer.cornerRadius = 16
-            $0.backgroundColor = .lightGray
+            $0.configure(.init(type: .back, title: nil))
         }
         
         tableView.do {
-            $0.backgroundColor = .white
-            $0.register(RecentSearchResultTableViewCell.self)
+            $0.backgroundColor = .monoblack
+            $0.register(FoodSearchResultTableViewCell.self)
             $0.configure(.init(title: "일치하는 결과가 없어요", description: "새로운 음식을 추가해주세요"))
+            $0.separatorStyle = .singleLine
+            $0.separatorColor = .pink1
+            $0.separatorInset = .zero
         }
         
         textField.do {
-            $0.backgroundColor = .clear
             $0.placeholder = "어떤 음식을 드셨나요?"
+            $0.layer.cornerRadius = 25
         }
         
         addButton.do {
             $0.style = .normal
             $0.setTitle("추가하기", for: .normal)
+            $0.layer.cornerRadius = 24
         }
     }
     
@@ -192,6 +184,10 @@ extension FoodCreateViewController {
         reactor.state.map(\.sections)
             .map { $0.isEmpty == false }
             .bind(to: tableView.rx.isEmptyViewHidden)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map(\.category)
+            .bind(to: navigationView.rx.title)
             .disposed(by: disposeBag)
     }
     

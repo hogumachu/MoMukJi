@@ -38,6 +38,8 @@ public final class TextFiled: UITextField {
     
     private func setupAttributes() {
         backgroundColor = .monogray1
+        textColor = .monoblack
+        font = .bodyB
     }
     
     private func updatePlaceholder() {

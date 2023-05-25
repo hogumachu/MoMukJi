@@ -9,13 +9,13 @@ import RxDataSources
 
 struct FoodCreateSection {
     
-    var items: [String]
+    var items: [FoodSearchResultTableViewCellModel]
     
 }
 
 extension FoodCreateSection: SectionModelType {
     
-    init(original: FoodCreateSection, items: [String]) {
+    init(original: FoodCreateSection, items: [FoodSearchResultTableViewCellModel]) {
         self = original
         self.items = items
     }
