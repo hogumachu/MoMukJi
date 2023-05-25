@@ -76,7 +76,6 @@ final class CategoryCreateViewController: BaseViewController<CategoryCreateReact
         }
         
         categoryTextField.do {
-            $0.font = .bodyB
             $0.placeholder = "카테고리를 입력해주세요"
             $0.layer.cornerRadius = 25
         }
