@@ -31,6 +31,7 @@ public extension TargetDependency {
         case snapKit
         case then
         case swinject
+        case lottie
         
         var object: TargetDependency {
             switch self {
@@ -42,6 +43,7 @@ public extension TargetDependency {
             case .snapKit: return TargetDependency.external(name: "SnapKit")
             case .then: return TargetDependency.external(name: "Then")
             case .swinject: return TargetDependency.external(name: "Swinject")
+            case .lottie: return TargetDependency.external(name: "Lottie")
             }
         }
     }
@@ -94,7 +96,8 @@ extension Module {
             return [
                 .target(name: Module.domain.name),
                 .ExternalSPM.rxSwift.object,
-                .ExternalSPM.rxCocoa.object
+                .ExternalSPM.rxCocoa.object,
+                .ExternalSPM.lottie.object
             ]
             
         case .feature:

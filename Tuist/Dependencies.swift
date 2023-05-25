@@ -9,6 +9,7 @@ let dependencies = Dependencies(
             .remote(url: "https://github.com/devxoul/Then", requirement: .upToNextMinor(from: "2.7.0")),
             .remote(url: "https://github.com/SnapKit/SnapKit.git", requirement: .upToNextMinor(from: "5.0.0")),
             .remote(url: "https://github.com/Swinject/Swinject.git", requirement: .upToNextMajor(from: "2.8.0")),
+            .remote(url: "https://github.com/airbnb/lottie-ios.git", requirement: .upToNextMajor(from: "4.2.0"))
         ]
     ),
     platforms: [.iOS]
