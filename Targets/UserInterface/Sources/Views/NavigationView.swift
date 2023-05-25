@@ -38,11 +38,11 @@ extension NavigationViewType {
     }
     
     var leftImageTintColor: UIColor {
-        return .black
+        return .white
     }
     
     var rightImageTintColor: UIColor {
-        return .black
+        return .white
     }
     
 }
@@ -53,7 +53,7 @@ public struct NavigationViewModel {
     let title: String?
     let font: UIFont?
     
-    public init(type: NavigationViewType, title: String?, font: UIFont? = .bodyR) {
+    public init(type: NavigationViewType, title: String?, font: UIFont? = .bodySB) {
         self.type = type
         self.title = title
         self.font = font
