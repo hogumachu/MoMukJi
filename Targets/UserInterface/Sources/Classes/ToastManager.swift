@@ -24,6 +24,7 @@ public enum ToastManager {
         UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut) {
             toast.alpha = 1
             toast.frame.origin = CGPoint(x: 20, y: topSafeArea + height)
+            toast.play()
         } completion: { _ in
             ToastCenter.shared.addToast(toast)
         }
@@ -35,6 +36,7 @@ public enum ToastManager {
         UIView.animate(withDuration: 0.2, delay: 0.0, options: .curveEaseInOut) {
             toast.alpha = 0
             toast.frame.origin = CGPoint(x: toastOrigin.x, y: topSafeArea)
+            toast.stop()
         } completion: { _ in
             toast.removeFromSuperview()
         }
