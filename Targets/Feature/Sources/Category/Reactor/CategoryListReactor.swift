@@ -59,7 +59,7 @@ final class CategoryListReactor: Reactor {
                 return .empty()
             }
             
-            dependency.coordinator.transition(to: .foodCreate(category), using: .push, animated: true, completion: nil)
+            dependency.coordinator.transition(to: .foodTime(category), using: .push, animated: true, completion: nil)
             return .empty()
             
         case .navigationLeftButtonTap:
