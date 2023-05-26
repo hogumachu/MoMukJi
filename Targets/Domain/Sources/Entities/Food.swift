@@ -10,13 +10,13 @@ import Foundation
 public struct Food {
     
     public let name: String
-    public let count: Int
     public let category: Category?
+    public let time: FoodTime?
     
-    public init(name: String, count: Int, category: Category?) {
+    public init(name: String, category: Category?, time: FoodTime?) {
         self.name = name
-        self.count = count
         self.category = category
+        self.time = time
     }
     
 }
