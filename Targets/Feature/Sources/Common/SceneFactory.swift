@@ -16,6 +16,7 @@ public enum Scene {
     case home
     case foodCreate(Domain.Category, FoodTimeEnum)
     case foodTime(Domain.Category)
+    case foodComplete(Food)
     case categoryList
     case categoryCreate
 }
@@ -70,6 +71,15 @@ public final class SceneFactoryImpl: SceneFactory {
             )
             let reactor = FoodTimeReactor(dependency: dependency)
             let viewController = FoodTimeViewController(reactor: reactor)
+            return viewController
+            
+        case .foodComplete(let food):
+            let dependency = FoodCompleteReactor.Dependency(
+                coordinator: coordinator,
+                food: food
+            )
+            let reactor = FoodCompleteReactor(dependency: dependency)
+            let viewController = FoodCompleteViewController(reactor: reactor)
             return viewController
             
         case .categoryList:
