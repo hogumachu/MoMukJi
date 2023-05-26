@@ -63,9 +63,7 @@ final class FoodCreateReactor: Reactor {
             do {
                 let food = makeCurrentFood(item: item)
                 try dependency.foodUseCase.insert(food: food)
-                dependency.coordinator.close(using: .dismiss, animated: true) { [weak self] in
-                    self?.dependency.coordinator.refresh()
-                }
+                dependency.coordinator.transition(to: .foodComplete(food), using: .push, animated: true, completion: nil)
                 return .empty()
             } catch {
                 return .empty()
@@ -77,9 +75,7 @@ final class FoodCreateReactor: Reactor {
             }
             do {
                 try dependency.foodUseCase.insert(food: food)
-                dependency.coordinator.close(using: .dismiss, animated: true) { [weak self] in
-                    self?.dependency.coordinator.refresh()
-                }
+                dependency.coordinator.transition(to: .foodComplete(food), using: .push, animated: true, completion: nil)
                 return .empty()
             } catch {
                 return .empty()
