@@ -12,18 +12,22 @@ import RealmSwift
 final class FoodObject: Object {
     
     @Persisted(primaryKey: true) private(set) var name: String
-    @Persisted private(set) var count: Int
     @Persisted private(set) var category: CategoryObject?
+    @Persisted private(set) var time: FoodTimeObject?
     
     convenience init(food: Food) {
         self.init()
         self.name = food.name
-        self.count = food.count
         self.category = food.category?.object()
+        self.time = food.time?.object()
     }
     
     var model: Food {
-        return Food(name: self.name, count: self.count, category: self.category?.model)
+        return Food(
+            name: self.name,
+            category: self.category?.model,
+            time: self.time?.model
+        )
     }
     
 }

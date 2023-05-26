@@ -5,9 +5,9 @@
 //  Created by 홍성준 on 2023/05/20.
 //
 
+import Domain
 import Foundation
 import ReactorKit
-import Domain
 
 final class FoodCreateReactor: Reactor {
     
@@ -20,6 +20,7 @@ final class FoodCreateReactor: Reactor {
         let categoryUseCase: CategoryUseCase
         let foodUseCase: FoodUseCase
         let category: Category
+        let foodTimeEnum: FoodTimeEnum
     }
     
     var initialState: State
@@ -112,22 +113,33 @@ extension FoodCreateReactor {
     
     private func makeRecentKeywordSections(keyword: String?) -> [Section] {
         guard let keyword, keyword.isEmpty == false else {
-            return foods.isEmpty ? [] : [Section(items: foods.map { Item(food: $0.name, count: $0.count) })]
+            return foods.isEmpty ? [] : [Section(items: foods.map { Item(food: $0.name, count: $0.time?.count ?? 0) })]
         }
         let filteredFoods = foods.filter { $0.name.contains(keyword) }
-            .map { Item(food: $0.name, count: $0.count) }
+            .map { Item(food: $0.name, count: $0.time?.count ?? 0) }
         return filteredFoods.isEmpty ? [] : [Section(items: filteredFoods)]
     }
     
     private func makeCurrentFood() -> Food? {
-        let name = currentState.keyword ?? ""
-        let count = dependency.foodUseCase.fetchFoodList(request: FoodRequest(name: name)).first?.count ?? 0
-        return Food(name: name, count: count + 1, category: dependency.category)
+        guard let name = currentState.keyword, name.isEmpty == false else {
+             return nil
+        }
+        let time = dependency.foodUseCase.fetchFoodList(request: .init(name: name)).first?.time ?? .zero
+        return Food(
+            name: name,
+            category: dependency.category,
+            time: dependency.foodTimeEnum.updating(time: time)
+        )
     }
     
     private func makeCurrentFood(item: Item) -> Food {
         let name = item.food
-        return Food(name: name, count: item.count + 1, category: dependency.category)
+        let time = dependency.foodUseCase.fetchFoodList(request: .init(name: name)).first?.time ?? .zero
+        return Food(
+            name: name,
+            category: dependency.category,
+            time: dependency.foodTimeEnum.updating(time: time)
+        )
     }
     
 }
