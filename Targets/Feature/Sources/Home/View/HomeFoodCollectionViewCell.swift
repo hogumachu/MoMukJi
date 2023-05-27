@@ -56,6 +56,7 @@ final class HomeFoodCollectionViewCell: BaseCollectionViewCell {
         nameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(15)
             make.leading.equalToSuperview().offset(30)
+            make.trailing.lessThanOrEqualToSuperview().offset(-100)
         }
         
         containerView.addSubview(countLabel)
@@ -68,6 +69,7 @@ final class HomeFoodCollectionViewCell: BaseCollectionViewCell {
         categoryContainerView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().offset(-30)
+            make.leading.greaterThanOrEqualTo(nameLabel.snp.trailing)
             make.height.equalTo(30)
         }
         
