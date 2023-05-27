@@ -67,6 +67,7 @@ final class HomeTimeCollectionViewCell: BaseCollectionViewCell {
             make.centerX.equalToSuperview()
             make.height.equalTo(30)
             make.bottom.equalTo(nameLabel.snp.top).offset(-5)
+            make.width.lessThanOrEqualToSuperview().offset(-40)
         }
         
         categoryContainerView.addSubview(categoryLabel)
