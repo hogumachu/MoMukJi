@@ -1,16 +1,23 @@
 //
-//  HomeCollectionViewCell.swift
+//  HomeFoodCollectionViewCell.swift
 //  Feature
 //
 //  Created by 홍성준 on 2023/05/20.
 //
 
+import Domain
 import UserInterface
 import UIKit
 import SnapKit
 import Then
 
-final class HomeCollectionViewCell: BaseCollectionViewCell {
+struct HomeFoodCollectionViewCellModel {
+    let name: String
+    let count: Int
+    let category: Domain.Category?
+}
+
+final class HomeFoodCollectionViewCell: BaseCollectionViewCell {
     
     private let containerView = UIView(frame: .zero)
     private let nameLabel = UILabel(frame: .zero)
@@ -18,13 +25,16 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
     private let categoryContainerView = UIView(frame: .zero)
     private let categoryLabel = UILabel(frame: .zero)
     
-    func configure(_ item: HomeItem) {
-        nameLabel.text = item.name
-        countLabel.text = "\(item.count)회"
-        if let category = item.category {
+    func configure(_ model: HomeFoodCollectionViewCellModel) {
+        nameLabel.text = model.name
+        countLabel.text = "\(model.count)회"
+        if let category = model.category {
             categoryLabel.text = category.name
             categoryLabel.textColor = UIColor(hex: category.textColor)
             categoryContainerView.backgroundColor = UIColor(hex: category.backgroundColor)
+        } else {
+            categoryLabel.text = nil
+            categoryContainerView.backgroundColor = .clear
         }
     }
     
@@ -32,13 +42,14 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         nameLabel.text = nil
         countLabel.text = nil
         categoryLabel.text = nil
+        categoryContainerView.backgroundColor = .clear
     }
     
     override func setupLayout() {
         contentView.addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.leading.trailing.equalToSuperview()
         }
         
         containerView.addSubview(nameLabel)
@@ -72,7 +83,7 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         containerView.do {
             $0.clipsToBounds = true
             $0.setGradientBackground(
-                startColor: .pink3 ?? .systemPink,
+                startColor: .pink2 ?? .systemPink,
                 endColor: .blue1 ?? .blue
             )
             $0.layer.cornerRadius = 35
