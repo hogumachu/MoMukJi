@@ -8,36 +8,34 @@
 import Domain
 import RxDataSources
 
-struct HomeSection: Equatable {
-    
-    var items: [HomeItem]
-    
+enum HomeSection {
+    case food([HomeItem])
+    case time([HomeItem])
 }
 
-struct HomeItem: Equatable, IdentifiableType {
-    
-    static func == (lhs: HomeItem, rhs: HomeItem) -> Bool {
-        lhs.identity == rhs.identity
-    }
-    
-    
-    var identity: String {
-        return name
-    }
-    
-    let name: String
-    let count: Int
-    let category: Domain.Category?
-    
+enum HomeItem {
+    case title(String)
+    case food(HomeFoodCollectionViewCellModel)
+    case time(HomeTimeCollectionViewCellModel)
 }
 
 extension HomeSection: SectionModelType {
     
-    typealias Item = HomeItem
+    var items: [HomeItem] {
+        switch self {
+        case .food(let items): return items
+        case .time(let items): return items
+        }
+    }
     
     init(original: HomeSection, items: [HomeItem]) {
-        self = original
-        self.items = items
+        switch original {
+        case .food(let items):
+            self = .food(items)
+            
+        case .time(let items):
+            self = .time(items)
+        }
     }
     
 }

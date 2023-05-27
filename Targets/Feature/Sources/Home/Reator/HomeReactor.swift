@@ -72,13 +72,28 @@ extension HomeReactor {
     }
     
     private func makeSections(foods: [Food]) -> [Section] {
+        return makeTimeSection(foods: foods) + makeFoodSection(foods: foods)
+    }
+    
+    private func makeFoodSection(foods: [Food]) -> [Section] {
         let items = foods.map { food -> Item in
-            return Item(name: food.name, count: food.time?.count ?? 0, category: food.category)
+            return .food(.init(name: food.name, count: food.time?.count ?? 0, category: food.category))
         }
         if items.isEmpty {
             return []
         }
-        return [Section(items: items)]
+        return [.food([.title("최근에 먹은 음식")] + items)]
+    }
+    
+    // TODO: - Time Section 생성 로직 추가
+    private func makeTimeSection(foods: [Food]) -> [Section] {
+        let items = foods.map { food -> Item in
+            return .time(.init(name: food.name, count: food.time?.count ?? 0, totalCount: 0, category: food.category))
+        }
+        if items.isEmpty {
+            return []
+        }
+        return [.food([.title("{TODO}으로 자주 먹었어요")] + items)]
     }
     
 }
