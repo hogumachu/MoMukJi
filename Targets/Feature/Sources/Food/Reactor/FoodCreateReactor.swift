@@ -20,7 +20,7 @@ final class FoodCreateReactor: Reactor {
         let categoryUseCase: CategoryUseCase
         let foodUseCase: FoodUseCase
         let category: Category
-        let foodTimeEnum: FoodTimeEnum
+        let mealtime: Mealtime
     }
     
     var initialState: State
@@ -109,10 +109,10 @@ extension FoodCreateReactor {
     
     private func makeRecentKeywordSections(keyword: String?) -> [Section] {
         guard let keyword, keyword.isEmpty == false else {
-            return foods.isEmpty ? [] : [Section(items: foods.map { Item(food: $0.name, count: $0.time?.count ?? 0) })]
+            return foods.isEmpty ? [] : [Section(items: foods.map { Item(food: $0.name, count: $0.mealtimes.count) })]
         }
         let filteredFoods = foods.filter { $0.name.contains(keyword) }
-            .map { Item(food: $0.name, count: $0.time?.count ?? 0) }
+            .map { Item(food: $0.name, count: $0.mealtimes.count) }
         return filteredFoods.isEmpty ? [] : [Section(items: filteredFoods)]
     }
     
@@ -120,21 +120,23 @@ extension FoodCreateReactor {
         guard let name = currentState.keyword, name.isEmpty == false else {
              return nil
         }
-        let time = dependency.foodUseCase.fetchFoodList(request: .init(name: name)).first?.time ?? .zero
+        var mealtimes = dependency.foodUseCase.fetchFoodList(request: .init(name: name)).first?.mealtimes ?? []
+        mealtimes.append(dependency.mealtime)
         return Food(
             name: name,
             category: dependency.category,
-            time: dependency.foodTimeEnum.updating(time: time)
+            mealtimes: mealtimes
         )
     }
     
     private func makeCurrentFood(item: Item) -> Food {
         let name = item.food
-        let time = dependency.foodUseCase.fetchFoodList(request: .init(name: name)).first?.time ?? .zero
+        var mealtimes = dependency.foodUseCase.fetchFoodList(request: .init(name: name)).first?.mealtimes ?? []
+        mealtimes.append(dependency.mealtime)
         return Food(
             name: name,
             category: dependency.category,
-            time: dependency.foodTimeEnum.updating(time: time)
+            mealtimes: mealtimes
         )
     }
     

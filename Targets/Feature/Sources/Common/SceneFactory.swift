@@ -14,7 +14,7 @@ import RealmSwift
 public enum Scene {
     case intro
     case home
-    case foodCreate(Domain.Category, FoodTimeEnum)
+    case foodCreate(Domain.Category, Mealtime)
     case foodTime(Domain.Category)
     case foodComplete(Food)
     case categoryList
@@ -48,19 +48,19 @@ public final class SceneFactoryImpl: SceneFactory {
             let dependency = HomeReactor.Dependency(
                 coordinator: coordinator,
                 foodUseCase: injector.resovle(FoodUseCase.self),
-                timeHelper: FoodTimeHelper()
+                timeHelper: MealtimeHelper()
             )
             let reactor = HomeReactor(dependency: dependency)
             let viewController = HomeViewController(reactor: reactor)
             return viewController
             
-        case .foodCreate(let category, let foodTimeEnum):
+        case .foodCreate(let category, let mealtime):
             let dependency = FoodCreateReactor.Dependency(
                 coordinator: coordinator,
                 categoryUseCase: injector.resovle(CategoryUseCase.self),
                 foodUseCase: injector.resovle(FoodUseCase.self),
                 category: category,
-                foodTimeEnum: foodTimeEnum
+                mealtime: mealtime
             )
             let reactor = FoodCreateReactor(dependency: dependency)
             let viewController = FoodCreateViewController(reactor: reactor)
@@ -69,7 +69,8 @@ public final class SceneFactoryImpl: SceneFactory {
         case .foodTime(let category):
             let dependency = FoodTimeReactor.Dependency(
                 coordinator: coordinator,
-                category: category
+                category: category,
+                mealtimeHelper: MealtimeHelper()
             )
             let reactor = FoodTimeReactor(dependency: dependency)
             let viewController = FoodTimeViewController(reactor: reactor)

@@ -11,12 +11,12 @@ public struct Food {
     
     public let name: String
     public let category: Category?
-    public let time: FoodTime?
+    public let mealtimes: [Mealtime]
     
-    public init(name: String, category: Category?, time: FoodTime?) {
+    public init(name: String, category: Category?, mealtimes: [Mealtime]) {
         self.name = name
         self.category = category
-        self.time = time
+        self.mealtimes = mealtimes
     }
     
 }
