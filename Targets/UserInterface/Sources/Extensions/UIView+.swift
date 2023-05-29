@@ -45,6 +45,7 @@ extension UIView {
     }
     
     public func setGradientBackground(
+        type: CAGradientLayerType = .axial,
         startColor: UIColor,
         endColor: UIColor,
         startPoint: CGPoint = CGPoint(x: 0.0, y: 0.0),
@@ -53,6 +54,7 @@ extension UIView {
         guard (layer.sublayers?[0] as? CAGradientLayer) == nil else { return }
         if bounds == .init() { layoutIfNeeded() }
         let gradientLayer = CAGradientLayer()
+        gradientLayer.type = type
         gradientLayer.colors = [startColor.cgColor, endColor.cgColor]
         gradientLayer.startPoint = startPoint
         gradientLayer.endPoint = endPoint

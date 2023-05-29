@@ -14,12 +14,14 @@ final class FoodObject: Object {
     @Persisted(primaryKey: true) private(set) var name: String
     @Persisted private(set) var category: CategoryObject?
     @Persisted private(set) var time: FoodTimeObject?
+    @Persisted private(set) var createdAt: Date
     
     convenience init(food: Food) {
         self.init()
         self.name = food.name
         self.category = food.category?.object()
         self.time = food.time?.object()
+        self.createdAt = Date()
     }
     
     var model: Food {

@@ -21,6 +21,7 @@ final class HomeReactor: Reactor {
     struct Dependency {
         let coordinator: AppCoordinator
         let foodUseCase: FoodUseCase
+        let timeHelper: FoodTimeHelper
     }
     
     init(dependency: Dependency) {
@@ -82,18 +83,90 @@ extension HomeReactor {
         if items.isEmpty {
             return []
         }
-        return [.food([.title("최근에 먹은 음식")] + items)]
+        return [.food([.title("최근에 먹은 음식")] + items.prefix(20))]
     }
     
-    // TODO: - Time Section 생성 로직 추가
     private func makeTimeSection(foods: [Food]) -> [Section] {
-        let items = foods.map { food -> Item in
-            return .time(.init(name: food.name, count: food.time?.count ?? 0, totalCount: 0, category: food.category))
-        }
+        let timeEnum = dependency.timeHelper.currentTimeEnum()
+        let items: [Item] = {
+            return foods.filter { $0.filter(using: timeEnum) }
+                .sorted(by: timeEnum.sort)
+                .prefix(8)
+                .map { $0.item(using: timeEnum) }
+        }()
+        
         if items.isEmpty {
             return []
         }
-        return [.food([.title("{TODO}으로 자주 먹었어요")] + items)]
+        return [.food([.title(timeEnum.title)] + items)]
+    }
+    
+}
+
+private extension FoodTimeEnum {
+    
+    var title: String {
+        switch self {
+        case .morning: return "아침으로 자주 먹었어요"
+        case .lunch: return "점심으로 자주 먹었어요"
+        case .dinner: return "저녁으로 자주 먹었어요"
+        case .midnightSnack: return "야식으로 자주 먹었어요"
+        }
+    }
+    
+    func sort(_ lhs: Food, _ rhs: Food) -> Bool {
+        switch self {
+        case .morning: return (lhs.time?.morningCount ?? 0) > (rhs.time?.morningCount ?? 0)
+        case .lunch: return (lhs.time?.lunchCount ?? 0) > (rhs.time?.lunchCount ?? 0)
+        case .dinner: return (lhs.time?.dinnerCount ?? 0) > (rhs.time?.dinnerCount ?? 0)
+        case .midnightSnack: return (lhs.time?.midnightSnackCount ?? 0) > (rhs.time?.midnightSnackCount ?? 0)
+        }
+    }
+    
+}
+
+private extension Food {
+    
+    var totalCount: Int {
+        return (time?.morningCount ?? 0) + (time?.lunchCount ?? 0) + (time?.dinnerCount ?? 0) + (time?.midnightSnackCount ?? 0)
+    }
+    
+    func filter(using timeEnum: FoodTimeEnum) -> Bool {
+        switch timeEnum {
+        case .morning:
+            guard let morning = time?.morningCount else { return false }
+            return morning > 0
+            
+        case .lunch:
+            guard let lunch = time?.lunchCount else { return false }
+            return lunch > 0
+            
+        case .dinner:
+            guard let dinner = time?.dinnerCount else { return false }
+            return dinner > 0
+            
+        case .midnightSnack:
+            guard let midnightSnack = time?.midnightSnackCount else { return false }
+            return midnightSnack > 0
+        }
+    }
+    
+    func item(using timeEnum: FoodTimeEnum) -> HomeItem {
+        let count: Int = {
+            switch timeEnum {
+            case .morning: return time?.morningCount ?? 0
+            case .lunch: return time?.lunchCount ?? 0
+            case .dinner: return time?.dinnerCount ?? 0
+            case .midnightSnack: return time?.midnightSnackCount ?? 0
+            }
+        }()
+        
+        return .time(.init(
+            name: name,
+            count: count,
+            totalCount: totalCount,
+            category: category
+        ))
     }
     
 }

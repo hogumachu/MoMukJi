@@ -93,12 +93,9 @@ final class HomeTimeCollectionViewCell: BaseCollectionViewCell {
         
         containerView.do {
             $0.clipsToBounds = true
-            $0.setGradientBackground(
-                startColor: .blue1 ?? .blue,
-                endColor: .yellow1 ?? .yellow,
-                startPoint: CGPoint(x: 0, y: 0.5),
-                endPoint: CGPoint(x: 1.5, y: 0.5)
-            )
+            $0.backgroundColor = .monoblack
+            $0.layer.borderColor = UIColor.pink2?.cgColor
+            $0.layer.borderWidth = 3
             $0.layer.cornerRadius = 16
         }
         
