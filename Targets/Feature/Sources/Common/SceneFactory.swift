@@ -47,7 +47,8 @@ public final class SceneFactoryImpl: SceneFactory {
         case .home:
             let dependency = HomeReactor.Dependency(
                 coordinator: coordinator,
-                foodUseCase: injector.resovle(FoodUseCase.self)
+                foodUseCase: injector.resovle(FoodUseCase.self),
+                timeHelper: FoodTimeHelper()
             )
             let reactor = HomeReactor(dependency: dependency)
             let viewController = HomeViewController(reactor: reactor)
