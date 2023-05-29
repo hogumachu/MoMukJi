@@ -20,6 +20,7 @@ final class FoodTimeViewController: BaseViewController<FoodTimeReactor> {
     private let titleLabel = UILabel(frame: .zero)
     private let containerView = UIView(frame: .zero)
     private let stackView = UIStackView(frame: .zero)
+    private let datePicker = UIDatePicker(frame: .zero)
     private let buttons: [FoodTimeButton] = FoodTimeButtonModel.allCases.map { model in
         let timeButton = FoodTimeButton(frame: .zero)
         timeButton.configure(model)
@@ -48,6 +49,7 @@ final class FoodTimeViewController: BaseViewController<FoodTimeReactor> {
         }
         
         stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(datePicker)
         buttons.forEach { stackView.addArrangedSubview($0) }
     }
     
@@ -69,12 +71,20 @@ final class FoodTimeViewController: BaseViewController<FoodTimeReactor> {
             $0.backgroundColor = .monoblack
         }
         
+        datePicker.do {
+            $0.tintColor = .pink1
+            $0.preferredDatePickerStyle = .compact
+            $0.datePickerMode = .date
+            $0.timeZone = .autoupdatingCurrent
+            $0.locale = Locale(identifier: "ko_KR")
+        }
+        
         stackView.do {
             $0.axis = .vertical
             $0.spacing = 20
             $0.alignment = .fill
             $0.distribution = .fillEqually
-            $0.setCustomSpacing(30, after: titleLabel)
+            $0.setCustomSpacing(5, after: datePicker)
         }
     }
     
@@ -90,6 +100,11 @@ extension FoodTimeViewController {
     private func bindAction(reactor: Reactor) {
         navigationView.rx.leftButtonTap
             .map { Reactor.Action.navigationLeftButtonTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        datePicker.rx.date
+            .map(Reactor.Action.updateDate)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
