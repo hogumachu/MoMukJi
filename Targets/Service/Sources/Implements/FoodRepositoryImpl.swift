@@ -25,7 +25,7 @@ public final class FoodRepositoryImpl: FoodRepository {
         }
         
         return objects
-            .compactMap { $0 }
+            .sorted(by: { $0.createdAt > $1.createdAt })
             .compactMap { $0.model }
     }
     
