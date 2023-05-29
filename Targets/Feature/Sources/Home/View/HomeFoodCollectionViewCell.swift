@@ -86,7 +86,9 @@ final class HomeFoodCollectionViewCell: BaseCollectionViewCell {
             $0.clipsToBounds = true
             $0.setGradientBackground(
                 startColor: .pink2 ?? .systemPink,
-                endColor: .blue1 ?? .blue
+                endColor: .yellow1 ?? .yellow,
+                startPoint: CGPoint(x: 0.0, y: 0.0),
+                endPoint: CGPoint(x: 2.0, y: 2.0)
             )
             $0.layer.cornerRadius = 35
         }
