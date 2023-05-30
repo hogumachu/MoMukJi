@@ -14,7 +14,7 @@ final class ToastCenter {
     private init() {}
     
     func addToast(_ toast: ToastView) {
-        let timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { [weak self] timer in
+        let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { [weak self] timer in
             guard let self = self else { return }
             ToastManager.hideToast(toast)
             self.removeToast(toast)

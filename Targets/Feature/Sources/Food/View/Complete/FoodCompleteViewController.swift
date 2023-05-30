@@ -47,7 +47,7 @@ extension FoodCompleteViewController {
         rx.viewWillAppear
             .withUnretained(self.successView)
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe(onNext: { view, _ in view.play(delay: 2) })
+            .subscribe(onNext: { view, _ in view.play(delay: 1) })
             .disposed(by: disposeBag)
         
         successView.animationComplete

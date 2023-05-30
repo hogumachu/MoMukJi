@@ -111,6 +111,11 @@ extension HomeViewController {
             .map { Reactor.Action.addButtonTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        collectionView.rx.itemSelected(dataSource: dataSource)
+            .map(Reactor.Action.itemSelected)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
     private func bindState(reactor: Reactor) {
