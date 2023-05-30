@@ -31,6 +31,7 @@ final class HomeReactor: Reactor {
     enum Action {
         case refresh
         case addButtonTap
+        case itemSelected(Item)
     }
     
     enum Mutation {
@@ -51,6 +52,22 @@ final class HomeReactor: Reactor {
         case .addButtonTap:
             dependency.coordinator.transition(to: .categoryList, using: .modal, animated: true, completion: nil)
             return .empty()
+            
+        case .itemSelected(let item):
+            switch item {
+            case .title:
+                return .empty()
+                
+            case .food(let model):
+                guard let food = dependency.foodUseCase.fetchFoodList(request: .init(name: model.name)).first else { return .empty() }
+                dependency.coordinator.transition(to: .foodDetail(food), using: .push, animated: true, completion: nil)
+                return .empty()
+                
+            case .time(let model):
+                guard let food = dependency.foodUseCase.fetchFoodList(request: .init(name: model.name)).first else { return .empty() }
+                dependency.coordinator.transition(to: .foodDetail(food), using: .push, animated: true, completion: nil)
+                return .empty()
+            }
         }
     }
     
