@@ -60,12 +60,15 @@ final class ToastView: UIView {
         switch model.type {
         case .normal:
             imageView.animation = LottieAnimation.named("lottie-check")
+            backgroundColor = .green.withAlphaComponent(0.3)
             
         case .success:
             imageView.animation = LottieAnimation.named("lottie-check")
+            backgroundColor = .green.withAlphaComponent(0.3)
             
         case .fail:
             imageView.animation = LottieAnimation.named("lottie-x-mark")
+            backgroundColor = .red.withAlphaComponent(0.3)
         }
         
         self.containerView.snp.remakeConstraints { make in
@@ -90,7 +93,7 @@ final class ToastView: UIView {
     
     private func setupAttributes() {
         clipsToBounds = true
-        backgroundColor = .white.withAlphaComponent(0.9)
+        backgroundColor = .white.withAlphaComponent(0.3)
         layer.cornerRadius = 16
         
         imageView.do {
@@ -100,7 +103,7 @@ final class ToastView: UIView {
         }
         
         messageLabel.do {
-            $0.textColor = .monoblack
+            $0.textColor = .white
             $0.font = .bodySB
         }
     }
