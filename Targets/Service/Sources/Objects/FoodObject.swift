@@ -15,12 +15,14 @@ final class FoodObject: Object {
     @Persisted private(set) var category: CategoryObject?
     @Persisted private(set) var mealtimes: List<MealtimeObject>
     @Persisted private(set) var createdAt: Date
+    @Persisted private(set) var isFavorite: Bool?
     
     convenience init(food: Food) {
         self.init()
         self.name = food.name
         self.category = food.category?.object()
         self.mealtimes = makeMealTimes(times: food.mealtimes)
+        self.isFavorite = food.isFavorite
         self.createdAt = Date()
     }
     
@@ -28,7 +30,8 @@ final class FoodObject: Object {
         return Food(
             name: self.name,
             category: self.category?.model,
-            mealtimes: self.mealtimes.map { $0.model }
+            mealtimes: self.mealtimes.map { $0.model },
+            isFavorite: self.isFavorite
         )
     }
     
