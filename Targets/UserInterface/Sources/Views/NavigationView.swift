@@ -14,9 +14,29 @@ import RxCocoa
 public enum NavigationViewType {
     
     case back
+    case backWithRightButton(NavigationRightButtonType)
     case close
     case none
     
+}
+
+public enum NavigationRightButtonType {
+    case heart
+    case heartFill
+    
+    var image: UIImage? {
+        switch self {
+        case .heart: return UIImage(systemName: "heart")
+        case .heartFill: return UIImage(systemName: "heart.fill")
+        }
+    }
+    
+    var tintColor: UIColor {
+        switch self {
+        case .heart: return .white
+        case .heartFill: return .red
+        }
+    }
 }
 
 extension NavigationViewType {
@@ -24,6 +44,7 @@ extension NavigationViewType {
     var leftImage: UIImage? {
         switch self {
         case .back: return UIImage(systemName: "chevron.backward")
+        case .backWithRightButton: return UIImage(systemName: "chevron.backward")
         case .close: return UIImage(systemName: "xmark")
         case .none: return nil
         }
@@ -32,6 +53,7 @@ extension NavigationViewType {
     var rightImage: UIImage? {
         switch self {
         case .back: return nil
+        case .backWithRightButton(let type): return type.image
         case .close: return nil
         case .none: return nil
         }
@@ -42,16 +64,21 @@ extension NavigationViewType {
     }
     
     var rightImageTintColor: UIColor {
-        return .white
+        switch self {
+        case .back: return .white
+        case .backWithRightButton(let type): return type.tintColor
+        case .close: return .white
+        case .none: return .white
+        }
     }
     
 }
 
 public struct NavigationViewModel {
     
-    let type: NavigationViewType
-    let title: String?
-    let font: UIFont?
+    public let type: NavigationViewType
+    public let title: String?
+    public let font: UIFont?
     
     public init(type: NavigationViewType, title: String?, font: UIFont? = .bodySB) {
         self.type = type
@@ -64,7 +91,7 @@ public struct NavigationViewModel {
 public final class NavigationView: UIView {
     
     private var navigationTintColor: UIColor?
-    private(set) var model: NavigationViewModel?
+    public private(set) var model: NavigationViewModel?
     fileprivate let titleLabel = UILabel(frame: .zero)
     fileprivate let leftButton = NavigationViewButton(frame: .zero)
     fileprivate let rightButton = NavigationViewButton(frame: .zero)
@@ -176,6 +203,7 @@ public final class NavigationView: UIView {
         
         rightButton.do {
             $0.tintColor = .white
+            $0.contentMode = .center
             $0.adjustsImageWhenHighlighted = true
         }
         
