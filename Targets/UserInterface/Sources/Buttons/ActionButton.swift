@@ -21,10 +21,10 @@ public enum ActionButtonStyle {
     
     var defaultTextColor: UIColor? {
         switch self {
-        case .normal:           return .green1
-        case .secondary:        return .yellow1
-        case .small:            return .green1
-        case .smallSecondary:   return .yellow1
+        case .normal:           return .white
+        case .secondary:        return .white
+        case .small:            return .white
+        case .smallSecondary:   return .white
         case .alert:            return .white
         }
     }
